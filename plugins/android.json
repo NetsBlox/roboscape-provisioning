@@ -9,6 +9,9 @@
   "installed_plugins": {
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "edu.vanderbilt.roboscape"
+    },
+    "cordova-plugin-hotspot": {
+      "PACKAGE_NAME": "edu.vanderbilt.roboscape"
     }
   },
   "dependent_plugins": {}
