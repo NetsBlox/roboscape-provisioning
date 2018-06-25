@@ -12,6 +12,9 @@
     },
     "cordova-plugin-wifi-direct": {
       "PACKAGE_NAME": "edu.vanderbilt.roboscape"
+    },
+    "cordova.plugins.diagnostic": {
+      "PACKAGE_NAME": "edu.vanderbilt.roboscape"
     }
   },
   "dependent_plugins": {}
