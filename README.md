@@ -11,8 +11,18 @@ wifi provisioning
 - add the wifidirect plugin `cordova plugin add https://github.com/NeoLSN/cordova-plugin-wifi-direct`
 
 ## TODO
-- prompt for location permission
+- [x] prompt for location permission
 - test connectivity with xbee chip
 - figure out a communication protocol after the p2p group is up
-- what determines the group owner in WIFI Direct standard
+    If you are the groupOwner => Listen for a connection; Else create a connection to the owner with the ip address.
+
+If you are the groupOwner => Listen for a connection
+- what determines the group owner in WIFI Direct standard [paer](https://ieeexplore.ieee.org/document/7777908/)
 - UI for controlling and connecting to discovered nodes and configuring the settings
+
+# References
+- Xbee Api Mode:
+[supported frames](https://www.digi.com/resources/documentation/Digidocs/90001942-13/reference/r_supported_frames_zigbee.htm?TocPath=XBee%20API%20mode%7C_____3)
+[API frame structure](https://www.digi.com/resources/documentation/Digidocs/90001456-13/concepts/c_api_frame_structure.htm?TocPath=XBee%20API%20mode%7C_____2)
+[commands table](http://widi.lecturer.pens.ac.id/Praktikum/Praktikum%20Mikro/XBee_ZB_ZigBee_AT_Commands.pdf)
+[s6b commands p147](https://www.digi.com/resources/documentation/digidocs/PDFs/90002180.pdf)
