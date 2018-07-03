@@ -2,14 +2,14 @@
 We need a way of provisioning multiple parallax activity boards equipped with Xbee S6B with initial configuration w/ no pre existing communication medium.
 
 ## Possible Solutions
-- Viral
-- wifi direct (p2p) [android only], no[?] wifi-direct standard on Xbee S6B module
+1. Viral
+2. wifi direct (p2p) [android only], no[?] wifi-direct standard on Xbee S6B module
   - prepared a prototype
   - plugin: https://github.com/NeoLSN/cordova-plugin-wifi-direct, https://github.com/Uepaa-AG/p2pkit-cordova
-- external hotspot:
+3. external hotspot:
   - phone into hotspot: iOS out of the picture (no support). localOnlyHotspot from android with random SSID and password.
   - laptop into hotspot + OS agnostic SW
-- robots as AP:
+4. robots as AP:
   - scan, pick, auto connect and configure. can automate the http request
     - how to go to AP mode
     - configuration should be saved after
@@ -17,10 +17,16 @@ We need a way of provisioning multiple parallax activity boards equipped with Xb
   - can be an app.
 
 ## App TODO
-- [x] prompt for location permission
-- test connectivity with xbee chip
-- figure out a communication protocol after the p2p group is up
+- wifi direct (solution #2)
+  - [x] prompt for location permission
+  - [failed] test connectivity with xbee chip
+  - figure out a communication protocol after the p2p group is up
     If you are the groupOwner => Listen for a connection; Else create a connection to the owner with the ip address.
+- robots as ap (solution #4)
+  - scope the global helpers methods to avoid collison
+  - add xhr post request function to set the desired configurations
+  - batch the process for more than one AP
+  - add a UI
 
 ## Installation
 - add the wifidirect plugin `cordova plugin add https://github.com/NeoLSN/cordova-plugin-wifi-direct`
