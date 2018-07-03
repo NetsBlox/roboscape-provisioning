@@ -45,3 +45,4 @@ UserInterfaceState.xcuserstate
 *.jks
 *.keystore
 *.apk
+.env
