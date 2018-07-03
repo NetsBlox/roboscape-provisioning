@@ -104,12 +104,16 @@ let aps = [];
 
 function addOpenNetwork(ssid) {
   console.log('adding', ssid);
-  WifiWizard.addNetwork(WifiWizard.formatWifiConfig(ssid), console.log, console.error);
+  return new Promise((resolve, reject) => {
+    WifiWizard.addNetwork(WifiWizard.formatWifiConfig(ssid), resolve, reject);
+  });
 }
 
 // connects to a known network
 function connectNetwork(ssid) {
-  WifiWizard.connectNetwork(WifiWizard.formatWifiString(ssid), console.log, console.error);
+  return new Promise((resolve, reject) => {
+    WifiWizard.connectNetwork(WifiWizard.formatWifiString(ssid), resolve, reject);
+  });
 }
 
 // updates scan results on an interval
@@ -122,6 +126,12 @@ function keepScanning(interval) {
     }, console.error);
   };
   return setInterval(getResults, interval);
+}
+
+function savedNetworks() {
+  return new Promise((resolve, reject) => {
+    WifiWizard.listNetworks(resolve, reject);
+  });
 }
 
 var app = {
