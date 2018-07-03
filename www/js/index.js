@@ -67,6 +67,8 @@ function ensureLocPerm() {
   });
 }
 
+
+// =========== WIFI DIRECT =================
 let peerList = [],
   wdNode;
 
@@ -95,6 +97,32 @@ function connectPeer(target) {
   });
 }
 
+
+
+// =========== ap connection ===============
+let aps = [];
+
+function addOpenNetwork(ssid) {
+  console.log('adding', ssid);
+  WifiWizard.addNetwork(WifiWizard.formatWifiConfig(ssid), console.log, console.error);
+}
+
+// connects to a known network
+function connectNetwork(ssid) {
+  WifiWizard.connectNetwork(WifiWizard.formatWifiString(ssid), console.log, console.error);
+}
+
+// updates scan results on an interval
+function keepScanning(interval) {
+  WifiWizard.startScan(console.log, console.error);
+  let getResults = () => {
+    WifiWizard.getScanResults(undefined, visibleAps => {
+      // TODO append, update, merge or overwrite current aps
+      aps = visibleAps;
+    }, console.error);
+  };
+  return setInterval(getResults, interval);
+}
 
 var app = {
   // Application Constructor
