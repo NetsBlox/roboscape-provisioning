@@ -7,14 +7,14 @@ We need a way of provisioning multiple parallax activity boards equipped with Xb
   - prepared a prototype
   - plugin: https://github.com/NeoLSN/cordova-plugin-wifi-direct, https://github.com/Uepaa-AG/p2pkit-cordova
 - external hotspot:
-  - phone into hotspot: no ios support. localOnlyHotspot from android with random SSID and password.
-  - laptop into hotspot + OS agnostic sw
+  - phone into hotspot: iOS out of the picture (no support). localOnlyHotspot from android with random SSID and password.
+  - laptop into hotspot + OS agnostic SW
 - robots as AP:
-  - scan, pick, auto connect and configure.
+  - scan, pick, auto connect and configure. can automate the http request
+    - how to go to AP mode
+    - configuration should be saved after
+    - hijack one of the field
   - can be an app.
-
-## Installation
-- add the wifidirect plugin `cordova plugin add https://github.com/NeoLSN/cordova-plugin-wifi-direct`
 
 ## App TODO
 - [x] prompt for location permission
@@ -22,11 +22,14 @@ We need a way of provisioning multiple parallax activity boards equipped with Xb
 - figure out a communication protocol after the p2p group is up
     If you are the groupOwner => Listen for a connection; Else create a connection to the owner with the ip address.
 
+## Installation
+- add the wifidirect plugin `cordova plugin add https://github.com/NeoLSN/cordova-plugin-wifi-direct`
+
 If you are the groupOwner => Listen for a connection
 - what determines the group owner in WIFI Direct standard [paer](https://ieeexplore.ieee.org/document/7777908/)
 - UI for controlling and connecting to discovered nodes and configuring the settings
 
-# References
+## References
 - Xbee Api Mode:
 [supported frames](https://www.digi.com/resources/documentation/Digidocs/90001942-13/reference/r_supported_frames_zigbee.htm?TocPath=XBee%20API%20mode%7C_____3)
 [API frame structure](https://www.digi.com/resources/documentation/Digidocs/90001456-13/concepts/c_api_frame_structure.htm?TocPath=XBee%20API%20mode%7C_____2)
