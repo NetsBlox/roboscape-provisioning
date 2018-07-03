@@ -109,12 +109,6 @@ var app = {
   onDeviceReady: function() {
     this.receivedEvent('deviceready');
     ensureLocPerm(); // async
-    getNode()
-      .then(node => {
-        wdNode = node;
-        return node;
-      })
-      .then(startDiscovering);
   },
 
   // Update DOM on a Received Event
