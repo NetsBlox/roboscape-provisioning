@@ -5,20 +5,42 @@ Framework7.use(Framework7Vue);
 Vue.component('page-about', {
   template: '#page-about'
 });
+
+
 Vue.component('page-form', {
-  template: '#page-form'
-});
-Vue.component('page-dynamic-routing', {
-  template: '#page-dynamic-routing'
-});
-Vue.component('page-not-found', {
-  template: '#page-not-found'
+  template: '#page-form',
+  mixins: [apsMixin],
+  data: function() {
+    return {
+      config: {
+        ssid: '',
+        encryption: '', //encryption algorithm
+        psk: ''
+      },
+    };
+  }, // end of data
+
+  methods: {
+    startSetup() {
+      console.log('started configuring robots', this.aps);
+      // TODO make sure the configuration is received and is correct
+
+      // TODO find the selected APs
+
+      // TODO connect to each AP and submit the form
+
+      // TODO show status on the screen
+    }
+  }
+
+
 });
 
 // Init App
 new Vue({
   el: '#app',
-  data: function () {
+  mixins: [apsMixin],
+  data: function() {
     return {
       // Framework7 parameters here
       f7params: {
@@ -26,6 +48,7 @@ new Vue({
         id: 'edu.vanderbilt.roboscape', // App bundle ID
         name: 'Roboscape', // App name
         theme: 'auto', // Automatic theme detection
+        pushState: true,
         // App routes
         routes: [
           {
@@ -46,16 +69,24 @@ new Vue({
           },
         ],
       }, // end of f7 parameters
+
       status: 'initialized',
+
     };
   }, // end of data
+
   created() {
     document.addEventListener('deviceready', this.onDeviceReady.bind(this));
   },
+
   methods: {
-    onDeviceReady() {
-      Perms.ensureLocPerm(); // async
+    onDeviceReady() { // only runs when cordova is available
       this.status = 'deviceready';
-    }
+      Perms.ensureLocPerm(); // async
+      const SCAN_INTERVAL = 1000 * 10;
+      Wifi.startDiscovering(SCAN_INTERVAL);
+      this.aps = Wifi.aps;
+    },
+
   }
 });
