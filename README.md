@@ -22,11 +22,12 @@ We need a way of provisioning multiple parallax activity boards equipped with Xb
   - [failed] test connectivity with xbee chip
   - figure out a communication protocol after the p2p group is up
     If you are the groupOwner => Listen for a connection; Else create a connection to the owner with the ip address.
-- robots as ap (solution #4)
-  - scope the global helpers methods to avoid collison
-  - add xhr post request function to set the desired configurations
+- _robots as ap_ (solution #4)
+  - [x] scope the global helpers methods to avoid collison
+  - add xhr post request function to set the desired configurations (axios post a form)
   - batch the process for more than one AP
-  - add a UI
+  - [x] add a UI
+    - show current status (configuring which robot, status of previous ones) on UI
 
 ## Installation
 - add the wifidirect plugin `cordova plugin add https://github.com/NeoLSN/cordova-plugin-wifi-direct`
