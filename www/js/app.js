@@ -45,7 +45,17 @@ new Vue({
             component: 'page-not-found',
           },
         ],
-      }
+      }, // end of f7 parameters
+      status: 'initialized',
     };
+  }, // end of data
+  created() {
+    document.addEventListener('deviceready', this.onDeviceReady.bind(this));
   },
+  methods: {
+    onDeviceReady() {
+      Perms.ensureLocPerm(); // async
+      this.status = 'deviceready';
+    }
+  }
 });
