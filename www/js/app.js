@@ -23,8 +23,8 @@ new Vue({
       // Framework7 parameters here
       f7params: {
         root: '#app', // App root element
-        id: 'io.framework7.testapp', // App bundle ID
-        name: 'Framework7', // App name
+        id: 'edu.vanderbilt.roboscape', // App bundle ID
+        name: 'Roboscape', // App name
         theme: 'auto', // Automatic theme detection
         // App routes
         routes: [
