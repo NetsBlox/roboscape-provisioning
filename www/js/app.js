@@ -22,7 +22,7 @@ Vue.component('page-form', {
 
   methods: {
     startSetup() {
-      console.log('started configuring robots', this.aps);
+      console.log('started configuring robots');
       // TODO make sure the configuration is received and is correct
 
       // TODO find the selected APs
@@ -70,8 +70,6 @@ new Vue({
         ],
       }, // end of f7 parameters
 
-      status: 'initialized',
-
     };
   }, // end of data
 
@@ -81,7 +79,6 @@ new Vue({
 
   methods: {
     onDeviceReady() { // only runs when cordova is available
-      this.status = 'deviceready';
       Perms.ensureLocPerm(); // async
       const SCAN_INTERVAL = 1000 * 10;
       Wifi.startDiscovering(SCAN_INTERVAL);
