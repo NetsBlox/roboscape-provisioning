@@ -46,3 +46,7 @@ UserInterfaceState.xcuserstate
 *.keystore
 *.apk
 .env
+
+# framework7
+www/libs
+www/fonts

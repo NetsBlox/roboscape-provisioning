@@ -5,7 +5,6 @@ const Wifi = {
   aps: [],
 
   addOpenNetwork(ssid) {
-    console.log('adding', ssid);
     return new Promise((resolve, reject) => {
       WifiWizard.addNetwork(WifiWizard.formatWifiConfig(ssid), resolve, reject);
     });
