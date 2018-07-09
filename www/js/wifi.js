@@ -10,6 +10,12 @@ const Wifi = {
     });
   },
 
+  removeNetwork(ssid) {
+    return new Promise((resolve, reject) => {
+      WifiWizard.removeNetwork(WifiWizard.formatWifiString(ssid), resolve, reject);
+    });
+  },
+
   // connects to a known network
   connectNetwork(ssid) {
     return new Promise((resolve, reject) => {
@@ -33,7 +39,11 @@ const Wifi = {
     return new Promise((resolve, reject) => {
       WifiWizard.listNetworks(resolve, reject);
     });
-  }
+  },
+
+  getCurrentSSID() {
+    return new Promise(WifiWizard.getCurrentSSID);
+  },
 
 };
 

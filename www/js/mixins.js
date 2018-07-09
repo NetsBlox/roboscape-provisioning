@@ -13,6 +13,7 @@ const apsMixin = {
           BSSID: 'test:bssid'
         },
       ], // live accesspoints
+      status: 'UNKNOWN',
     };
   }, // end of data
 
@@ -20,5 +21,25 @@ const apsMixin = {
     xbeeAps() {
       return this.aps.filter(ap => ap.SSID.startsWith('xbee'));
     }
+  },
+
+  methods: {
+    updateCurSSID() {
+      return Wifi.getCurrentSSID()
+        .then(ssid => {
+          this.status = `connected to ${ssid}`;
+          return ssid;
+        });
+    },
+
+    // updates the reference to live accesspoints
+    // it's done this way because since I couldn't get 'computed' to auto update properly.
+    updateAps() {
+      if (!cordova) return;
+
+      this.aps = Wifi.aps;
+      return Wifi.aps;
+    }
+
   }
 };

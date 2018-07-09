@@ -20,6 +20,10 @@ Vue.component('page-form', {
     };
   }, // end of data
 
+  created() {
+    this.updateAps();
+  },
+
   methods: {
     startSetup() {
       console.log('started configuring robots');
@@ -30,14 +34,15 @@ Vue.component('page-form', {
       // TODO connect to each AP and submit the form
 
       // TODO show status on the screen
-    }
+    },
+
   }
 
 
 });
 
 // Init App
-new Vue({
+const app = new Vue({
   el: '#app',
   mixins: [apsMixin],
   data: function() {
@@ -69,6 +74,8 @@ new Vue({
           },
         ],
       }, // end of f7 parameters
+
+      originalAp: '',
 
     };
   }, // end of data

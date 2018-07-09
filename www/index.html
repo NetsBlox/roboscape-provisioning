@@ -68,6 +68,7 @@
           <!-- main content area -->
           <f7-block strong>
             <p>Here is a list of detected robots</p>
+            <p>Status: {{ status }}</p>
             <div class="list simple-list">
               <ul>
                 <li v-for="ap in aps" :key="ap.BSSID" >{{ap.SSID}}</li>
