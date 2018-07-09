@@ -1,3 +1,4 @@
+const XBEE_ENDPOINT = 'http://192.168.1.10/';
 // Init F7 Vue Plugin
 Framework7.use(Framework7Vue);
 
@@ -86,10 +87,106 @@ const app = new Vue({
 
   methods: {
     onDeviceReady() { // only runs when cordova is available
+      console.log('Device ready');
       Perms.ensureLocPerm(); // async
-      const SCAN_INTERVAL = 1000 * 10;
+      const SCAN_INTERVAL = 1000 * 5;
       Wifi.startDiscovering(SCAN_INTERVAL);
-      this.aps = Wifi.aps;
+      // TODO update to events
+      setInterval(this.updateAps.bind(this), SCAN_INTERVAL + 1000); // due to lack of computed property auto update.
+
+      this.updateCurSSID().then(ssid => {
+        this.originalAp = ssid;
+      })
+    },
+
+    // submits the robot form given the key,value pairs
+    // inp: data: key values with keys being valid xbee key
+    submitForm(config) {
+      var keyValPair = Object.keys(config)
+        .map(key => {
+          // maybe sanitize
+          return `${key}=${config[key]}`;
+        })
+        .join('&');
+
+      return this.submitFormXhr(keyValPair)
+    },
+
+    submitFormXhr(str) {
+      return new Promise((resolve, reject) => {
+        var data = str;
+
+        var xhr = new XMLHttpRequest();
+        xhr.withCredentials = true;
+        xhr.timeout = 1000 * 2; // 2s timeout
+
+        xhr.addEventListener("readystatechange", function () {
+          if (xhr.readyState === 4) {
+            console.log(this.responseText);
+            if (xhr.status >= 200 && xhr.status < 300) {
+              resolve(xhr);
+            } else {
+              let err = new Error(xhr.statusText || 'Unsuccessful Xhr response');
+              err.xhr = xhr;
+              reject(err);
+            }
+          }
+        });
+
+        xhr.open("POST", XBEE_ENDPOINT);
+        xhr.setRequestHeader("cache-control", "no-cache");
+        xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+
+        xhr.send(data);
+      })
+    },
+
+    // opts: {ssid, encryption, psk, payload}
+    generateXbeeConfig(opts) {
+      let config = {};
+      // if (!opts.ssid) throw new Error('ssid is required');
+      // config.ID = opts.ssid;
+      if (opts.encryption) config.EE = opts.encryption;
+      if (opts.psk) config.PK = opts.psk;
+      if (opts.payload) config.EQ = opts.payload;
+      return config;
+    },
+
+    // connects to a xbee softap
+    async connect(ssid) {
+      // reset?
+      // add network to known networks
+      await Wifi.addOpenNetwork(ssid);
+      await Wifi.connectNetwork(ssid);
+
+      // TODO wait until connected
+      await sleep(10000);
+    },
+
+    async checkConnection(ssid) {
+      return new Promise(async (resolve, reject) => {
+        let curSSID = await Wifi.getCurrentSSID();
+        if (curSSID !== WifiWizard.formatWifiString(ssid)) {
+          reject('mismatching ssids');
+        }
+        axios.get(XBEE_ENDPOINT)
+          .then(resolve)
+          .catch(err => {
+            reject('cant talk to xbee webserver', err)
+          })
+      })
+    },
+
+    async test() {
+      let targetAp = this.xbeeAps[0];
+      let xbeeConf = this.generateXbeeConfig({
+        payload: 'payload',
+      })
+      await Wifi.removeNetwork(targetAp.SSID);
+      await this.connect(targetAp.SSID);
+      await this.checkConnection(targetAp.SSID);
+      let res = await this.submitForm(xbeeConf);
+      return res;
     },
 
   }
