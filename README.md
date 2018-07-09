@@ -24,10 +24,11 @@ We need a way of provisioning multiple parallax activity boards equipped with Xb
     If you are the groupOwner => Listen for a connection; Else create a connection to the owner with the ip address.
 - _robots as ap_ (solution #4)
   - [x] scope the global helpers methods to avoid collison
-  - add xhr post request function to set the desired configurations (axios post a form)
-  - batch the process for more than one AP
+  - [x] add xhr post request function to set the desired configurations (axios post a form)
   - [x] add a UI
     - show current status (configuring which robot, status of previous ones) on UI
+  - add a self contained way of setting up one robot with status update (and retry?)
+  - batch the process for more than one AP
 
 ## Installation
 - add the wifidirect plugin `cordova plugin add https://github.com/NeoLSN/cordova-plugin-wifi-direct`
