@@ -30,6 +30,7 @@ We need a way of provisioning multiple parallax activity boards equipped with Xb
   - [x] add a self contained way of setting up one robot with status update (and retry?)
   - [x] batch the process for more than one AP
   - address inline todos (faster wifi connection check)
+  - [ ] ensure mobile network is turned off (routing issues);
 
 ## Installation
 - add the wifidirect plugin `cordova plugin add https://github.com/NeoLSN/cordova-plugin-wifi-direct`
