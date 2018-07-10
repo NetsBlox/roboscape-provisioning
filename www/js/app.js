@@ -1,4 +1,5 @@
-const XBEE_ENDPOINT = 'http://192.168.1.10/';
+const XBEE_ENDPOINT = 'http://192.168.1.10/',
+  XBEE_AP_PREFIX = 'xbee';
 // Init F7 Vue Plugin
 Framework7.use(Framework7Vue);
 
@@ -86,17 +87,36 @@ const app = new Vue({
   },
 
   methods: {
-    onDeviceReady() { // only runs when cordova is available
-      console.log('Device ready');
+    async onDeviceReady() { // only runs when cordova is available
+      console.debug('cordova ready');
       Perms.ensureLocPerm(); // async
       const SCAN_INTERVAL = 1000 * 5;
       Wifi.startDiscovering(SCAN_INTERVAL);
       // TODO update to events
       setInterval(this.updateAps.bind(this), SCAN_INTERVAL + 1000); // due to lack of computed property auto update.
 
-      this.updateCurSSID().then(ssid => {
-        this.originalAp = ssid;
-      })
+      let curSSID = await this.updateCurSSID();
+      this.originalAp = curSSID;
+      await this.removeXbeeConnections();
+      console.debug('app ready');
+    },
+
+    // forgets xbee aps and connect to the last good AP
+    async removeXbeeConnections() {
+      let savedNets = await Wifi.savedNetworks();
+      for (let i=0; i<savedNets.length; i++) {
+        let ap = savedNets[i];
+        if (this.isXbeeAp(ap)) await Wifi.removeNetwork(ap);
+      }
+      await this.updateCurSSID();
+      if (this.isXbeeAp(this.curSSID)) { // if connected to a xbee AP
+        if (this.originalAp && !this.isXbeeAp(this.originalAp)) {
+          // then we have a connection to connect to
+          await Wifi.connectNetwork(this.originalAp);
+        } else {
+          await Wifi.disconnectNetwork(this.curSSID);
+        }
+      }
     },
 
     // submits the robot form given the key,value pairs
@@ -150,6 +170,19 @@ const app = new Vue({
       if (opts.psk) config.PK = opts.psk;
       if (opts.payload) config.EQ = opts.payload;
       return config;
+    },
+    // performs different checks based on input (either ssid or AP obj)
+    isXbeeAp(input) {
+      let ssid = input;
+      if (input instanceof Object) {
+        // check for mac mactching
+        ssid = input.SSID;
+      }
+      ssid = ssid.replace('"', '');
+      if (ssid.startsWith(XBEE_AP_PREFIX)) return true;
+
+      // if all checks failed
+      return false;
     },
 
     // connects to a xbee softap

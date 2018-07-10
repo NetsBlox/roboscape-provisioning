@@ -5,19 +5,40 @@ const Wifi = {
   aps: [],
 
   addOpenNetwork(ssid) {
+    console.debug('adding open network', ssid);
     return new Promise((resolve, reject) => {
       WifiWizard.addNetwork(WifiWizard.formatWifiConfig(ssid), resolve, reject);
     });
   },
 
   removeNetwork(ssid) {
+    ssid = WifiWizard.formatWifiString(ssid);
+
+    // check to see if the network is saved
+    return this.savedNetworks().then(nets => {
+      let network = nets.find(net => net === ssid);
+      if (!network) {
+        console.log(ssid, 'was not found in the saved networks');
+        return;
+      }
+      console.debug('removing', ssid);
+      return new Promise((resolve, reject) => {
+        WifiWizard.removeNetwork(ssid, resolve, reject);
+      });
+
+    });
+  },
+
+  disconnectNetwork(ssid) {
+    console.debug('removing', ssid);
     return new Promise((resolve, reject) => {
-      WifiWizard.removeNetwork(WifiWizard.formatWifiString(ssid), resolve, reject);
+      WifiWizard.disconnectNetwork(WifiWizard.formatWifiString(ssid), resolve, reject);
     });
   },
 
   // connects to a known network
   connectNetwork(ssid) {
+    console.debug('connecting to network', ssid);
     return new Promise((resolve, reject) => {
       WifiWizard.connectNetwork(WifiWizard.formatWifiString(ssid), resolve, reject);
     });

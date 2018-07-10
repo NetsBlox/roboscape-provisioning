@@ -14,6 +14,7 @@ const apsMixin = {
         },
       ], // live accesspoints
       status: 'UNKNOWN',
+      curSSID: '',
     };
   }, // end of data
 
@@ -28,6 +29,7 @@ const apsMixin = {
       return Wifi.getCurrentSSID()
         .then(ssid => {
           this.status = `connected to ${ssid}`;
+          this.curSSID = ssid;
           return ssid;
         });
     },
