@@ -16,9 +16,11 @@ Vue.component('page-form', {
     return {
       config: {
         ssid: '',
-        encryption: '', //encryption algorithm
-        psk: ''
+        encryption: 0, //encryption algorithm
+        psk: '',
+        payload: ''
       },
+      selectedAps: [],
     };
   }, // end of data
 
@@ -29,6 +31,8 @@ Vue.component('page-form', {
   methods: {
     startSetup() {
       console.log('started configuring robots');
+      console.log(this.config);
+      console.log(this.selectedAps);
       // TODO make sure the configuration is received and is correct
 
       // TODO find the selected APs
@@ -37,6 +41,16 @@ Vue.component('page-form', {
 
       // TODO show status on the screen
     },
+
+    checkSelectedAps() {
+      const self = this;
+      const value = event.target.value;
+      if (event.target.checked) {
+        self.selectedAps.push(value);
+      } else {
+        self.selectedAps.splice(self.selectedAps.indexOf(value), 1);
+      }
+    }
 
   }
 

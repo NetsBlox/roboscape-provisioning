@@ -67,8 +67,8 @@
 
           <!-- main content area -->
           <f7-block strong>
-            <p>Here is a list of detected robots</p>
             <p>Status: {{ status }}</p>
+            <p>Here is a list of detected robots</p>
             <div class="list simple-list">
               <ul>
                 <li v-for="ap in aps" :key="ap.BSSID" >{{ap.SSID}}</li>
@@ -105,30 +105,37 @@
       <f7-list form>
         <f7-list-item>
           <f7-label>SSID</f7-label>
-          <f7-input type="text" placeholder="access point SSID"></f7-input>
+          <f7-input :value="config.ssid" @input="config.ssid = $event.target.value" type="text" placeholder="access point SSID"></f7-input>
         </f7-list-item>
         <f7-list-item>
           <f7-label>Select encryption</f7-label>
-          <f7-input type="select">
-            <option selected>None</option>
-            <option>WEP</option>
-            <option>WPA</option>
-            <option>WPA2</option>
+          <f7-input :value="config.encryption" @input="config.encryption = $event.target.value" type="select">
+            <option value="0" selected>None</option>
+            <option value="1">WPA (TKIP)</option>
+            <option value="2">WPA2 (AES)</option>
+            <option value="3">WEP</option>
           </f7-input>
         </f7-list-item>
         <f7-list-item>
           <f7-label>PSK</f7-label>
-          <f7-input type="text" placeholder="pre-shared key"></f7-input>
+          <f7-input :value="config.psk" @input="config.psk = $event.target.value" type="text" placeholder="pre-shared key"></f7-input>
         </f7-list-item>
         <f7-list-item>
           <f7-label>Custom data</f7-label>
-          <f7-input type="text" placeholder=""></f7-input>
+          <f7-input :value="config.payload" @input="config.payload = $event.target.value" type="text" placeholder=""></f7-input>
         </f7-list-item>
       </f7-list>
 
       <f7-block-title>Target Robots</f7-block-title>
       <f7-list form>
-        <f7-list-item v-for="ap in xbeeAps" :key="ap.BSSID" checkbox name="ap.SSID" :value="ap.SSID" :title="ap.SSID"></f7-list-item>
+        <f7-list-item v-for="ap in xbeeAps"
+          :key="ap.BSSID"
+          checkbox name="ap.SSID"
+          :value="ap.SSID"
+          :checked="selectedAps.indexOf(ap.SSID) >= 0"
+          @change="checkSelectedAps"
+          :title="ap.SSID">
+        </f7-list-item>
       </f7-list>
 
       <f7-block>
