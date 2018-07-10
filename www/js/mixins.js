@@ -1,9 +1,9 @@
 'use strict';
 
-const apsMixin = {
+const aMixin = {
   data: function() {
     return {
-      aps: [
+      aps: [ // TODO this is not shared between different components. Switch to using Wifi.aps
         {
           SSID: 'xbee-23423 test ssid',
           BSSID: 'test:bssid'
@@ -13,7 +13,6 @@ const apsMixin = {
           BSSID: 'test:bssid'
         },
       ], // live accesspoints
-      status: 'UNKNOWN',
       curSSID: '',
     };
   }, // end of data
@@ -28,7 +27,6 @@ const apsMixin = {
     updateCurSSID() {
       return Wifi.getCurrentSSID()
         .then(ssid => {
-          this.status = `connected to ${ssid}`;
           this.curSSID = ssid;
           return ssid;
         });

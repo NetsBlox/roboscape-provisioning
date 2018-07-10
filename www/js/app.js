@@ -11,7 +11,7 @@ Vue.component('page-about', {
 
 Vue.component('page-form', {
   template: '#page-form',
-  mixins: [apsMixin],
+  mixins: [aMixin],
   data: function() {
     return {
       config: {
@@ -60,7 +60,7 @@ Vue.component('page-form', {
 // Init App
 const app = new Vue({
   el: '#app',
-  mixins: [apsMixin],
+  mixins: [aMixin],
   data: function() {
     return {
       // Framework7 parameters here
@@ -180,9 +180,11 @@ const app = new Vue({
     _generateXbeeConfig(opts) {
       let config = {};
       // if (!opts.ssid) throw new Error('ssid is required');
-      // config.ID = opts.ssid;
-      if (opts.encryption) config.EE = opts.encryption;
-      if (opts.psk) config.PK = opts.psk;
+      if (opts.ssid) {
+        config.ID = opts.ssid;
+        if (opts.encryption) config.EE = opts.encryption;
+        if (opts.psk) config.PK = opts.psk; // TODO sanity check for open enc and psk
+      }
       if (opts.payload) config.EQ = opts.payload;
       return config;
     },
@@ -226,7 +228,8 @@ const app = new Vue({
       });
     },
 
-    async setupRobot(ssid) {
+    async setupRobot(ssid, config) {
+      if (!config) throw new Error('missing the configuration');
       // check if it's still visible
       this.updateAps();
       let targetAp = this.aps.find(ap => ap.SSID === ssid);
@@ -236,12 +239,10 @@ const app = new Vue({
       this.status = `connecting to ${ssid}`;
       await this.connect(targetAp.SSID);
 
-      this.status = `checking connection with ${ssid}`;
+      this.status = `verifying connection with ${ssid}`;
       await this.checkConnection(targetAp.SSID);
 
-      let xbeeConf = this._generateXbeeConfig({
-        payload: 'payload',
-      });
+      let xbeeConf = this._generateXbeeConfig(config);
 
       this.status = `configuring robot ${ssid}`;
       let res = await this.submitForm(xbeeConf);
