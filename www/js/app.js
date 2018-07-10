@@ -21,6 +21,7 @@ Vue.component('page-form', {
         payload: ''
       },
       selectedAps: [],
+      status: '',
     };
   }, // end of data
 
@@ -33,9 +34,8 @@ Vue.component('page-form', {
       console.log('started configuring robots');
       console.log(this.config);
       console.log(this.selectedAps);
-      // TODO make sure the configuration is received and is correct
 
-      // TODO find the selected APs
+      // TODO make sure the configuration is received and is correct
 
       // TODO connect to each AP and submit the form
 
@@ -49,88 +49,6 @@ Vue.component('page-form', {
         self.selectedAps.push(value);
       } else {
         self.selectedAps.splice(self.selectedAps.indexOf(value), 1);
-      }
-    }
-
-  }
-
-
-});
-
-// Init App
-const app = new Vue({
-  el: '#app',
-  mixins: [aMixin],
-  data: function() {
-    return {
-      // Framework7 parameters here
-      f7params: {
-        root: '#app', // App root element
-        id: 'edu.vanderbilt.roboscape', // App bundle ID
-        name: 'Roboscape', // App name
-        theme: 'auto', // Automatic theme detection
-        pushState: true,
-        // App routes
-        routes: [
-          {
-            path: '/about/',
-            component: 'page-about'
-          },
-          {
-            path: '/form/',
-            component: 'page-form'
-          },
-          {
-            path: '/dynamic-route/blog/:blogId/post/:postId/',
-            component: 'page-dynamic-routing'
-          },
-          {
-            path: '(.*)',
-            component: 'page-not-found',
-          },
-        ],
-      }, // end of f7 parameters
-
-      originalAp: '',
-      status: '',
-
-    };
-  }, // end of data
-
-  created() {
-    document.addEventListener('deviceready', this.onDeviceReady.bind(this));
-  },
-
-  methods: {
-    async onDeviceReady() { // only runs when cordova is available
-      console.debug('cordova ready');
-      Perms.ensureLocPerm(); // async
-      const SCAN_INTERVAL = 1000 * 5;
-      Wifi.startDiscovering(SCAN_INTERVAL);
-      // TODO update to events
-      setInterval(this.updateAps.bind(this), SCAN_INTERVAL + 1000); // due to lack of computed property auto update.
-
-      let curSSID = await this.updateCurSSID();
-      this.originalAp = curSSID;
-      await this.removeXbeeConnections();
-      console.debug('app ready');
-    },
-
-    // forgets xbee aps and connect to the last good AP
-    async removeXbeeConnections() {
-      let savedNets = await Wifi.savedNetworks();
-      for (let i=0; i<savedNets.length; i++) {
-        let ap = savedNets[i];
-        if (this.isXbeeAp(ap)) await Wifi.removeNetwork(ap);
-      }
-      await this.updateCurSSID();
-      if (this.isXbeeAp(this.curSSID)) { // if connected to a xbee AP
-        if (this.originalAp && !this.isXbeeAp(this.originalAp)) {
-          // then we have a connection to connect to
-          await Wifi.connectNetwork(this.originalAp);
-        } else {
-          await Wifi.disconnectNetwork(this.curSSID);
-        }
       }
     },
 
@@ -189,20 +107,6 @@ const app = new Vue({
       return config;
     },
 
-    // performs different checks based on input (either ssid or AP obj)
-    isXbeeAp(input) {
-      let ssid = input;
-      if (input instanceof Object) {
-        // check for mac mactching
-        ssid = input.SSID;
-      }
-      ssid = ssid.replace('"', '');
-      if (ssid.startsWith(XBEE_AP_PREFIX)) return true;
-
-      // if all checks failed
-      return false;
-    },
-
     // connects to a xbee softap
     async connect(ssid) {
       await Wifi.removeNetwork(ssid);
@@ -247,6 +151,87 @@ const app = new Vue({
       this.status = `configuring robot ${ssid}`;
       let res = await this.submitForm(xbeeConf);
       return res;
+    },
+
+  }
+
+
+});
+
+// Init App
+const app = new Vue({
+  el: '#app',
+  mixins: [aMixin],
+  data: function() {
+    return {
+      // Framework7 parameters here
+      f7params: {
+        root: '#app', // App root element
+        id: 'edu.vanderbilt.roboscape', // App bundle ID
+        name: 'Roboscape', // App name
+        theme: 'auto', // Automatic theme detection
+        pushState: true,
+        // App routes
+        routes: [
+          {
+            path: '/about/',
+            component: 'page-about'
+          },
+          {
+            path: '/form/',
+            component: 'page-form'
+          },
+          {
+            path: '/dynamic-route/blog/:blogId/post/:postId/',
+            component: 'page-dynamic-routing'
+          },
+          {
+            path: '(.*)',
+            component: 'page-not-found',
+          },
+        ],
+      }, // end of f7 parameters
+
+      originalAp: '',
+
+    };
+  }, // end of data
+
+  created() {
+    document.addEventListener('deviceready', this.onDeviceReady.bind(this));
+  },
+
+  methods: {
+    async onDeviceReady() { // only runs when cordova is available
+      console.debug('cordova ready');
+      Perms.ensureLocPerm(); // async
+      const SCAN_INTERVAL = 1000 * 5;
+      Wifi.startDiscovering(SCAN_INTERVAL);
+      // TODO update to events
+      setInterval(this.updateAps.bind(this), SCAN_INTERVAL + 1000); // due to lack of computed property auto update.
+
+      let curSSID = await this.updateCurSSID();
+      this.originalAp = curSSID;
+      await this.removeXbeeConnections();
+      console.debug('app ready');
+    },
+
+    // forgets xbee aps and connect to the last good AP
+    async removeXbeeConnections() {
+      let savedNets = await Wifi.savedNetworks();
+      for (let i=0; i<savedNets.length; i++) {
+        let ap = savedNets[i];
+        if (this.isXbeeAp(ap)) await Wifi.removeNetwork(ap);
+      }
+      await this.updateCurSSID();
+      if (this.isXbeeAp(this.curSSID)) { // if connected to a xbee AP
+        if (this.originalAp && !this.isXbeeAp(this.originalAp)) {
+          // then we have a connection to connect to
+          await Wifi.connectNetwork(this.originalAp);
+        } else {
+          await Wifi.disconnectNetwork(this.curSSID);
+        }
+      }
     },
 
   }

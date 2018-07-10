@@ -39,7 +39,21 @@ const aMixin = {
 
       this.aps = Wifi.aps;
       return Wifi.aps;
-    }
+    },
+
+    // performs different checks based on input (either ssid or AP obj)
+    isXbeeAp(input) {
+      let ssid = input;
+      if (input instanceof Object) {
+        // check for mac mactching
+        ssid = input.SSID;
+      }
+      ssid = ssid.replace('"', '');
+      if (ssid.startsWith(XBEE_AP_PREFIX)) return true;
+
+      // if all checks failed
+      return false;
+    },
 
   }
 };

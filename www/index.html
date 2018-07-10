@@ -67,7 +67,6 @@
 
           <!-- main content area -->
           <f7-block strong>
-            <p>Status: {{ status }}</p>
             <p>Here is a list of detected robots</p>
             <div class="list simple-list">
               <ul>
@@ -101,6 +100,9 @@
   <template id="page-form">
     <f7-page>
       <f7-navbar title="Form" back-link="Back"></f7-navbar>
+
+      <p>Status: {{ status }}</p>
+
       <f7-block-title>Create a Confguration</f7-block-title>
       <f7-list form>
         <f7-list-item>
