@@ -30,16 +30,24 @@ Vue.component('page-form', {
   },
 
   methods: {
-    startSetup() {
+    async startSetup() {
       console.log('started configuring robots');
       console.log(this.config);
       console.log(this.selectedAps);
 
       // TODO make sure the configuration is received and is correct
 
-      // TODO connect to each AP and submit the form
+      // TODO lock the configuration (disable changes)
 
-      // TODO show status on the screen
+      // TODO connect to each AP and submit the form
+      console.log('configuring', this.selectedAps.length, 'robot(s)');
+      for (let i=0; i<this.selectedAps.length; i++) {
+        let ap = this.selectedAps[i];
+        await this.setupRobot(ap, this.config);
+      }
+
+      // TODO show per AP status text
+
     },
 
     checkSelectedAps() {
@@ -150,6 +158,8 @@ Vue.component('page-form', {
 
       this.status = `configuring robot ${ssid}`;
       let res = await this.submitForm(xbeeConf);
+      this.status = `configured robot ${ssid}`;
+
       return res;
     },
 
