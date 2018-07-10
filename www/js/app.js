@@ -78,6 +78,7 @@ const app = new Vue({
       }, // end of f7 parameters
 
       originalAp: '',
+      status: '',
 
     };
   }, // end of data
@@ -129,18 +130,18 @@ const app = new Vue({
         })
         .join('&');
 
-      return this.submitFormXhr(keyValPair)
+      return this._submitFormXhr(keyValPair);
     },
 
-    submitFormXhr(str) {
+    _submitFormXhr(str) {
       return new Promise((resolve, reject) => {
         var data = str;
 
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
-        xhr.timeout = 1000 * 2; // 2s timeout
+        xhr.timeout = 1000 * 5; // 5s timeout
 
-        xhr.addEventListener("readystatechange", function () {
+        xhr.addEventListener('readystatechange', function () {
           if (xhr.readyState === 4) {
             console.log(this.responseText);
             if (xhr.status >= 200 && xhr.status < 300) {
@@ -153,16 +154,16 @@ const app = new Vue({
           }
         });
 
-        xhr.open("POST", XBEE_ENDPOINT);
-        xhr.setRequestHeader("cache-control", "no-cache");
-        xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        xhr.open('POST', XBEE_ENDPOINT);
+        xhr.setRequestHeader('cache-control', 'no-cache');
+        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
 
         xhr.send(data);
-      })
+      });
     },
 
     // opts: {ssid, encryption, psk, payload}
-    generateXbeeConfig(opts) {
+    _generateXbeeConfig(opts) {
       let config = {};
       // if (!opts.ssid) throw new Error('ssid is required');
       // config.ID = opts.ssid;
@@ -171,6 +172,7 @@ const app = new Vue({
       if (opts.payload) config.EQ = opts.payload;
       return config;
     },
+
     // performs different checks based on input (either ssid or AP obj)
     isXbeeAp(input) {
       let ssid = input;
@@ -187,7 +189,7 @@ const app = new Vue({
 
     // connects to a xbee softap
     async connect(ssid) {
-      // reset?
+      await Wifi.removeNetwork(ssid);
       // add network to known networks
       await Wifi.addOpenNetwork(ssid);
       await Wifi.connectNetwork(ssid);
@@ -198,26 +200,36 @@ const app = new Vue({
 
     async checkConnection(ssid) {
       return new Promise(async (resolve, reject) => {
-        let curSSID = await Wifi.getCurrentSSID();
-        if (curSSID !== WifiWizard.formatWifiString(ssid)) {
+        await this.updateCurSSID();
+        if (this.curSSID !== WifiWizard.formatWifiString(ssid)) {
           reject('mismatching ssids');
         }
         axios.get(XBEE_ENDPOINT)
           .then(resolve)
           .catch(err => {
-            reject('cant talk to xbee webserver', err)
-          })
-      })
+            reject('cant talk to xbee webserver', err);
+          });
+      });
     },
 
-    async test() {
-      let targetAp = this.xbeeAps[0];
-      let xbeeConf = this.generateXbeeConfig({
-        payload: 'payload',
-      })
-      await Wifi.removeNetwork(targetAp.SSID);
+    async setupRobot(ssid) {
+      // check if it's still visible
+      this.updateAps();
+      let targetAp = this.aps.find(ap => ap.SSID === ssid);
+      if (!targetAp) throw new Error(`AP ${ssid} is not visible.`); // or assert?
+
+      // CHECK this should resolve after the connection is fully established
+      this.status = `connecting to ${ssid}`;
       await this.connect(targetAp.SSID);
+
+      this.status = `checking connection with ${ssid}`;
       await this.checkConnection(targetAp.SSID);
+
+      let xbeeConf = this._generateXbeeConfig({
+        payload: 'payload',
+      });
+
+      this.status = `configuring robot ${ssid}`;
       let res = await this.submitForm(xbeeConf);
       return res;
     },
