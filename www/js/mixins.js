@@ -36,7 +36,7 @@ const aMixin = {
     // it's done this way because since I couldn't get 'computed' to auto update properly.
     updateAps() {
       try {
-        if (!cordova) {
+        if (cordova) { // if cordova is availabe then we are on a device
           this.aps = Wifi.aps;
           return Wifi.aps;
         }

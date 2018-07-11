@@ -27,7 +27,6 @@ Vue.component('page-form', {
 
   created() {
     this.updateAps();
-    console.log('created');
     app.$f7.dialog.alert('Make sure mobile data is turned off.');
   },
 
@@ -224,6 +223,7 @@ const app = new Vue({
       const SCAN_INTERVAL = 1000 * 5;
       Wifi.startDiscovering(SCAN_INTERVAL);
       // TODO update to events
+      this.updateAps();
       setInterval(this.updateAps.bind(this), SCAN_INTERVAL + 1000); // due to lack of computed property auto update.
 
       let curSSID = await this.updateCurSSID();
