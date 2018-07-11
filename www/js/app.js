@@ -1,5 +1,7 @@
 const XBEE_ENDPOINT = 'http://192.168.1.10/',
-  XBEE_AP_PREFIX = 'xbee';
+  XBEE_AP_PREFIX = 'xbee',
+  store = {originalAp: '', curSSID: ''};
+
 // Init F7 Vue Plugin
 Framework7.use(Framework7Vue);
 
@@ -42,8 +44,6 @@ const app = new Vue({
         ],
       }, // end of f7 parameters
 
-      originalAp: '',
-
     };
   }, // end of data
 
@@ -62,28 +62,11 @@ const app = new Vue({
       setInterval(this.updateAps.bind(this), SCAN_INTERVAL + 1000); // due to lack of computed property auto update.
 
       let curSSID = await this.updateCurSSID();
-      this.originalAp = curSSID;
+      store.originalAp = curSSID;
       await this.removeXbeeConnections();
       console.debug('app ready');
     },
 
-    // forgets xbee aps and connect to the last good AP
-    async removeXbeeConnections() {
-      let savedNets = await Wifi.savedNetworks();
-      for (let i=0; i<savedNets.length; i++) {
-        let ap = savedNets[i];
-        if (this.isXbeeAp(ap)) await Wifi.removeNetwork(ap);
-      }
-      await this.updateCurSSID();
-      if (this.isXbeeAp(this.curSSID)) { // if connected to a xbee AP
-        if (this.originalAp && !this.isXbeeAp(this.originalAp)) {
-          // then we have a connection to connect to
-          await Wifi.connectNetwork(this.originalAp);
-        } else {
-          await Wifi.disconnectNetwork(this.curSSID);
-        }
-      }
-    },
 
   }
 });

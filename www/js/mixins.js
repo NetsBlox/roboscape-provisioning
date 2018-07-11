@@ -13,7 +13,6 @@ const aMixin = {
           BSSID: 'test:bssid'
         },
       ], // live accesspoints
-      curSSID: '',
     };
   }, // end of data
 
@@ -27,7 +26,7 @@ const aMixin = {
     updateCurSSID() {
       return Wifi.getCurrentSSID()
         .then(ssid => {
-          this.curSSID = ssid;
+          store.curSSID = ssid;
           return ssid;
         });
     },
@@ -56,6 +55,24 @@ const aMixin = {
 
       // if all checks failed
       return false;
+    },
+
+    // forgets xbee aps and connect to the last good AP
+    async removeXbeeConnections() {
+      let savedNets = await Wifi.savedNetworks();
+      for (let i=0; i<savedNets.length; i++) {
+        let ap = savedNets[i];
+        if (this.isXbeeAp(ap)) await Wifi.removeNetwork(ap);
+      }
+      await this.updateCurSSID();
+      if (this.isXbeeAp(store.curSSID)) { // if connected to a xbee AP
+        if (store.originalAp && !this.isXbeeAp(store.originalAp)) {
+          // then we have a connection to connect to
+          await Wifi.connectNetwork(store.originalAp);
+        } else {
+          await Wifi.disconnectNetwork(store.curSSID);
+        }
+      }
     },
 
   }

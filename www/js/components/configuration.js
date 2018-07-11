@@ -40,6 +40,8 @@ Vue.component('page-form', {
 
       // TODO show per AP status text
 
+      this.status = `finished configuring ${this.selectedAps.length} robots.`;
+      this.removeXbeeConnections();
     },
 
     checkSelectedAps() {
@@ -121,7 +123,7 @@ Vue.component('page-form', {
     async checkConnection(ssid) {
       return new Promise(async (resolve, reject) => {
         await this.updateCurSSID();
-        if (this.curSSID !== WifiWizard.formatWifiString(ssid)) {
+        if (store.curSSID !== WifiWizard.formatWifiString(ssid)) {
           reject('mismatching ssids');
         }
         axios.get(XBEE_ENDPOINT)
