@@ -13,6 +13,7 @@ Vue.component('page-form', {
       },
       selectedAps: [],
       status: '',
+      logs: []
     };
   }, // end of data
 
@@ -32,7 +33,7 @@ Vue.component('page-form', {
       // TODO lock the configuration (disable changes)
 
       // TODO connect to each AP and submit the form
-      console.log('configuring', this.selectedAps.length, 'robot(s)');
+      this.log('configuring', this.selectedAps.length, 'robot(s)');
       for (let i=0; i<this.selectedAps.length; i++) {
         let ap = this.selectedAps[i];
         await this.setupRobot(ap, this.config);
@@ -41,7 +42,15 @@ Vue.component('page-form', {
       // TODO show per AP status text
 
       this.status = `finished configuring ${this.selectedAps.length} robots.`;
+      this.log (`finished configuring ${this.selectedAps.length} robots.`);
       this.removeXbeeConnections();
+    },
+
+    log(msg) {
+      this.logs.push({
+        time: new Date().toTimeString().match(/[0-9:]+/)[0],
+        text: msg
+      });
     },
 
     checkSelectedAps() {
@@ -163,16 +172,20 @@ Vue.component('page-form', {
 
       // CHECK this should resolve after the connection is fully established
       this.status = `connecting to ${ssid}`;
+      this.log(`connecting to ${ssid}`);
       await this.connect(targetAp.SSID);
 
       this.status = `verifying connection with ${ssid}`;
+      this.log(`verifying connection with ${ssid}`);
       await this.checkConnection(targetAp.SSID);
 
       let xbeeConf = this._generateXbeeConfig(config);
 
       this.status = `configuring robot ${ssid}`;
+      this.log(`configuring robot ${ssid}`);
       let res = await this.submitForm(xbeeConf);
       this.status = `configured robot ${ssid}`;
+      this.log(`configured robot ${ssid}`);
 
       return res;
     },

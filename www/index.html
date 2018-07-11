@@ -149,6 +149,15 @@
           <f7-button class="col" raised fill color="orange">Cancel</f7-button>
         </f7-row>
       </f7-block>
+
+      <!-- log view -->
+      <f7-block>
+        <div class="list simple-list">
+          <ul>
+            <li v-for="log in logs">{{log.time}} {{log.text}}</li>
+          </ul>
+        </div>
+      </f7-block>
     </f7-page>
   </template>
 

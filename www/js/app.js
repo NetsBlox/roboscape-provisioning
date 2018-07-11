@@ -1,4 +1,4 @@
-const XBEE_ENDPOINT = 'http://192.168.1.10/',
+const XBEE_ENDPOINT = 'http://192.168.1.10',
   XBEE_AP_PREFIX = 'xbee',
   store = {originalAp: '', curSSID: ''};
 
