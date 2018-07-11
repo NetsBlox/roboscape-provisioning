@@ -67,7 +67,7 @@
 
           <!-- main content area -->
           <f7-block strong>
-            <p>Detected {{ this.aps.length }} access points and {{ this.xbeeAps.length }} robots:</p>
+            <p>Detected {{ this.aps.length }} access points including {{ this.xbeeAps.length }} robots:</p>
             <div class="list simple-list">
               <ul>
                 <li v-for="ap in xbeeAps" :key="ap.BSSID" >{{ap.SSID}}</li>
@@ -163,9 +163,6 @@
 
   <!-- Framework7-Vue plugin -->
   <script src="libs/framework7-vue/framework7-vue.min.js"></script>
-
-  <!-- Axios -->
-  <script src="libs/axios/axios.min.js"></script>
 
   <!-- Your custom app scripts -->
   <script src="js/utils.js"></script>
