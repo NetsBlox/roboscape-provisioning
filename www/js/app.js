@@ -49,24 +49,24 @@ const app = new Vue({
 
   created() {
     document.addEventListener('deviceready', this.onDeviceReady.bind(this));
+
   },
 
   methods: {
     async onDeviceReady() { // only runs when cordova is available
       console.debug('cordova ready');
+
       Perms.ensureLocPerm(); // async
       const SCAN_INTERVAL = 1000 * 5;
       Wifi.startDiscovering(SCAN_INTERVAL);
-      // TODO update to events
-      this.updateAps();
-      setInterval(this.updateAps.bind(this), SCAN_INTERVAL + 1000); // due to lack of computed property auto update.
+      this.keepApsUptodate();
 
       let curSSID = await this.updateCurSSID();
       store.originalAp = curSSID;
+
       await this.removeXbeeConnections();
       console.debug('app ready');
     },
-
 
   }
 });

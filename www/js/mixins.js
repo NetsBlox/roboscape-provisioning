@@ -33,15 +33,22 @@ const aMixin = {
 
     // updates the reference to live accesspoints
     // it's done this way because since I couldn't get 'computed' to auto update properly.
-    updateAps() {
+    keepApsUptodate() {
       try {
         if (cordova) { // if cordova is availabe then we are on a device
           this.aps = Wifi.aps;
+          document.addEventListener('scanresults', this.onScanResults.bind(this));
           return Wifi.aps;
         }
       } catch (e) {
+        console.error(e);
       }
     },
+
+    onScanResults(event) {
+      this.aps = Wifi.aps; // we already have a handle to it and just want to be notified of updates
+    },
+
 
     // performs different checks based on input (either ssid or AP obj)
     isXbeeAp(input) {

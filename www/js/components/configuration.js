@@ -17,7 +17,7 @@ Vue.component('page-form', {
   }, // end of data
 
   created() {
-    this.updateAps();
+    this.keepApsUptodate();
     app.$f7.dialog.alert('Make sure mobile data is turned off.');
   },
 
@@ -145,7 +145,6 @@ Vue.component('page-form', {
     async setupRobot(ssid, config) {
       if (!config) throw new Error('missing the configuration');
       // check if it's still visible
-      this.updateAps();
       let targetAp = this.aps.find(ap => ap.SSID === ssid);
       if (!targetAp) throw new Error(`AP ${ssid} is not visible.`); // or assert?
 

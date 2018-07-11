@@ -45,15 +45,20 @@ const Wifi = {
   },
 
   // updates scan results on an interval
-  startDiscovering(interval=10000) {
-    WifiWizard.startScan(console.log, console.error);
+  startDiscovering(interval=5000) {
     let getResults = () => {
+      WifiWizard.startScan(console.log, console.error);
       WifiWizard.getScanResults(undefined, visibleAps => {
         // TODO append, update, merge or overwrite current aps
         this.aps = visibleAps;
+        let event = new CustomEvent('scanresults', {
+          detail: visibleAps
+        });
+        document.dispatchEvent(event);
       }, console.error);
     };
-    return setInterval(getResults, interval);
+    getResults();
+    return setInterval(getResults.bind(this), interval);
   },
 
   savedNetworks() {
