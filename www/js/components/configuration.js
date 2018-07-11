@@ -134,13 +134,24 @@ Vue.component('page-form', {
         if (store.curSSID !== WifiWizard.formatWifiString(ssid)) {
           reject('mismatching ssids');
         }
-        axios.get(XBEE_ENDPOINT, {
-          timeout: 2000
-        })
-          .then(resolve)
-          .catch(err => {
-            reject('cant talk to xbee webserver', err);
-          });
+
+        var xhr = new XMLHttpRequest();
+        xhr.timeout = 1000 * 5; // 5s timeout
+
+        xhr.addEventListener('readystatechange', function () {
+          if (xhr.readyState === 4) {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              resolve(xhr);
+            } else {
+              let err = new Error(xhr.statusText || 'Unsuccessful Xhr response');
+              err.xhr = xhr;
+              reject(err);
+            }
+          }
+        });
+
+        xhr.open('GET', XBEE_ENDPOINT);
+        xhr.send();
       });
     },
 
