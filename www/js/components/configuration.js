@@ -117,7 +117,13 @@ Vue.component('page-form', {
       await Wifi.connectNetwork(ssid);
 
       // TODO wait until connected
-      await sleep(10000);
+      let connected = async () => {
+        await this.updateCurSSID();
+        if (store.curSSID !== WifiWizard.formatWifiString(ssid)) {
+          throw new Error(`Not connected to ${ssid} yet`);
+        }
+      };
+      await waitUntilPromise(connected.bind(this), 10000);
     },
 
     async checkConnection(ssid) {
@@ -126,7 +132,9 @@ Vue.component('page-form', {
         if (store.curSSID !== WifiWizard.formatWifiString(ssid)) {
           reject('mismatching ssids');
         }
-        axios.get(XBEE_ENDPOINT)
+        axios.get(XBEE_ENDPOINT, {
+          timeout: 2000
+        })
           .then(resolve)
           .catch(err => {
             reject('cant talk to xbee webserver', err);

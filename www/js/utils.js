@@ -19,6 +19,25 @@ function waitUntil(fn, maxWait) {
   });
 };
 
+function waitUntilPromise(fn, maxWait=5000) {
+  var startTime = Date.now();
+  return new Promise((resolve, reject) => {
+    var check = async function() {
+      try {
+        let result = await fn(); // assuming the function also has a reasonable timeout of its own
+        resolve(result);
+      } catch (e) { // fn is not resolving yet;
+        if (Date.now()-startTime > maxWait) {
+          reject('timed out');
+        } else {
+          setTimeout(check, 100);
+        }
+      }
+    };
+    check();
+  });
+};
+
 function sleep(duration) {
   console.debug('sleeping for', duration);
   return new Promise(resolve => {
