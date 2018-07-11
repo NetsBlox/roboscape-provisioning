@@ -124,6 +124,8 @@ Vue.component('page-form', {
         }
       };
       await waitUntilPromise(connected.bind(this), 10000);
+
+      await sleep(3000); // also needed since matching ssid names doens't mean an established connection
     },
 
     async checkConnection(ssid) {
