@@ -35,10 +35,13 @@ const aMixin = {
     // updates the reference to live accesspoints
     // it's done this way because since I couldn't get 'computed' to auto update properly.
     updateAps() {
-      if (!cordova) return;
-
-      this.aps = Wifi.aps;
-      return Wifi.aps;
+      try {
+        if (!cordova) {
+          this.aps = Wifi.aps;
+          return Wifi.aps;
+        }
+      } catch (e) {
+      }
     },
 
     // performs different checks based on input (either ssid or AP obj)

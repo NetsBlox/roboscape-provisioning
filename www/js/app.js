@@ -27,6 +27,8 @@ Vue.component('page-form', {
 
   created() {
     this.updateAps();
+    console.log('created');
+    app.$f7.dialog.alert('Make sure mobile data is turned off.');
   },
 
   methods: {
@@ -162,6 +164,10 @@ Vue.component('page-form', {
 
       return res;
     },
+
+    turnOffMobileData() {
+      // TODO
+    }
 
   }
 
