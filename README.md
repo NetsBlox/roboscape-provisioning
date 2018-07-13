@@ -31,6 +31,11 @@ We need a way of provisioning multiple parallax activity boards equipped with Xb
   - [x] batch the process for more than one AP
   - ensure mobile network is turned off (routing issues);
 
+## Firmware TODO
+- physical button (5sec hold) to enter configuration mode
+- stricter robot keymatching
+- mac@groupID
+
 ## Installation
 - add the wifidirect plugin `cordova plugin add https://github.com/NeoLSN/cordova-plugin-wifi-direct`
 
