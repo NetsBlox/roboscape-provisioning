@@ -18,6 +18,7 @@ enum {
     INFRA_LEFT_PIN = 11,
     INFRA_RIGHT_PIN = 10,
     PRESSED = 0,
+    LONG_HOLD_DURATION = 3000,
 };
 
 fdserial* xbee;
@@ -177,11 +178,22 @@ void software_reset_xbee()
 
 void setup_mode()
 {
-    print("\n##### entering setup mode #####\n");
-    print("\n##### network reset xbee #####\n");
-    xbcmd("ATNR\r", response, 10, 20);
-    print("reply = %s", response);
-    pause(500);
+    pause(1000);
+    /* software_reset_xbee(); */
+    print("cmd = +++\n");
+    int bytes = xbcmd("+++", response, 10, 2000);
+    if(bytes == 0)
+        print("Timeout error.\n");
+    else
+    {
+        print("reply = %s", response);
+
+        print("\n##### entering setup mode #####\n");
+        print("\n##### network reset xbee #####\n");
+        xbcmd("ATNR\r", response, 10, 20);
+        print("reply = %s", response);
+        pause(500);
+    }
 }
 
 int main()
@@ -190,7 +202,7 @@ int main()
     xbee = xbee_open(XBEE_DO_PIN, XBEE_DI_PIN, 1);
     pause(500);
 
-    // TODO if failed to connect enter setup mode
+    // TODO if failed to connect to an AP, enter setup mode
 
     xbee_send_api(xbee, "\x8\001SL", 4);
     xbee_send_api(xbee, "\x8\002SH", 4);
@@ -334,10 +346,8 @@ int main()
                 endPressed = get_time();
                 timeHold = endPressed - startPressed;
 
-                if (timeHold >= 5000) {
-                    print("Button hold for 5 seconds or more\n");
+                if (timeHold >= LONG_HOLD_DURATION) {
                     print("entering setup mode\n");
-
                     setup_mode();
                 }
 
