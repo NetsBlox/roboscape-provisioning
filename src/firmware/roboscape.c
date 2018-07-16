@@ -17,6 +17,7 @@ enum {
     INFRA_LIGHT_PIN = 5,
     INFRA_LEFT_PIN = 11,
     INFRA_RIGHT_PIN = 10,
+    PRESSED = 0,
 };
 
 fdserial* xbee;
@@ -35,6 +36,16 @@ static const unsigned char server_port[2] = { 0x07, 0xb5 }; // 1973
 unsigned int time_ref = 0;
 unsigned int last_cnt = 0;
 int comSeqNum = 0;
+
+
+// to keep track of time for user button
+unsigned int buttonState;     // current state of the button
+unsigned int lastButtonState = 1; // previous state of the button
+unsigned int startPressed = 0;    // the time button was pressed
+unsigned int endPressed = 0;      // the time button was released
+unsigned int timeHold = 0;        // the time button is hold
+unsigned int timeReleased = 0;    // the time button is released
+
 
 int get_time()
 {
@@ -135,23 +146,23 @@ void com_sync(const char* cmd, int len, char* comment)
 
 int xbcmd(char *cmd, char *reply, int bytesMax, int msMax)
 {
-  int c = -1, n = 0;
-  writeStr(xbee, cmd);
-  memset(reply, 0, bytesMax);
+    int c = -1, n = 0;
+    writeStr(xbee, cmd);
+    memset(reply, 0, bytesMax);
 
-  int tmax = (CLKFREQ/1000) * msMax;
-  int tmark = CNT;
+    int tmax = (CLKFREQ/1000) * msMax;
+    int tmark = CNT;
 
-  while(1)
-  {
-    c = fdserial_rxCheck(xbee);
-    if(c != -1)
-      reply[n++] = c;
-    if(CNT - tmark > tmax)
-      return 0;
-    if(c == '\r')
-      return n;
-  }
+    while(1)
+    {
+        c = fdserial_rxCheck(xbee);
+        if(c != -1)
+            reply[n++] = c;
+        if(CNT - tmark > tmax)
+            return 0;
+        if(c == '\r')
+            return n;
+    }
 }
 
 void software_reset_xbee()
@@ -164,20 +175,22 @@ void software_reset_xbee()
     print("finished resetting xbee\n");
 }
 
+void setup_mode()
+{
+    print("\n##### entering setup mode #####\n");
+    print("\n##### network reset xbee #####\n");
+    xbcmd("ATNR\r", response, 10, 20);
+    print("reply = %s", response);
+    pause(500);
+}
+
 int main()
 {
     input(XBEE_DO_PIN);
     xbee = xbee_open(XBEE_DO_PIN, XBEE_DI_PIN, 1);
+    pause(500);
 
-    xbee_send_api(xbee, "\x8\000NR", 4);
-    if (0) {
-        xbee_send_api(xbee, "\x8\000IDvummiv", 10);
-    } else {
-        xbee_send_api(xbee, "\x8\000IDrobonet", 11);
-        xbee_send_api(xbee, "\x8\000EE\002", 5);
-        xbee_send_api(xbee, "\x8\000PKcybercamp", 13);
-        pause(100); // do not overflow the xbee buffer
-    }
+    // TODO if failed to connect enter setup mode
 
     xbee_send_api(xbee, "\x8\001SL", 4);
     xbee_send_api(xbee, "\x8\002SH", 4);
@@ -292,9 +305,9 @@ int main()
             buffer[buffer_len++] = whiskers;
             xbee_send_api(xbee, buffer, buffer_len);
         }
-        temp = input(BUTTON_PIN);
-        if (button != temp) { // user button
-            button = temp;
+        buttonState = input(BUTTON_PIN);
+        if (button != buttonState) { // user button
+            button = buttonState;
             set_tx_headers('P');
             buffer[buffer_len++] = button;
             xbee_send_api(xbee, buffer, buffer_len);
@@ -306,5 +319,30 @@ int main()
             buffer[buffer_len++] = infrared;
             xbee_send_api(xbee, buffer, buffer_len);
         }
+
+        /* button state detection */
+        if (buttonState != lastButtonState) { // button state changed
+            lastButtonState = buttonState;
+
+            // the button was just pressed
+            if (buttonState == PRESSED) {
+                startPressed = get_time();
+                timeReleased = startPressed - endPressed;
+                // here we can compute for button idle time
+
+            } else { // the button was just released
+                endPressed = get_time();
+                timeHold = endPressed - startPressed;
+
+                if (timeHold >= 5000) {
+                    print("Button hold for 5 seconds or more\n");
+                    print("entering setup mode\n");
+
+                    setup_mode();
+                }
+
+            }
+        } /* end of button state detection */
+
     }
 }
