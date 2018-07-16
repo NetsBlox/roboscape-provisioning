@@ -36,10 +36,15 @@ Vue.component('page-form', {
       this.log('configuring', this.selectedAps.length, 'robot(s)');
       for (let i=0; i<this.selectedAps.length; i++) {
         let ap = this.selectedAps[i];
-        await this.setupRobot(ap, this.config);
+        try {
+          await this.setupRobot(ap, this.config);
+        } catch (e) {
+          this.log('failed to configure', ap);
+        }
       }
 
       // TODO show per AP status text
+      // TODO auto retry for unconfigured robots
 
       this.status = `finished configuring ${this.selectedAps.length} robots.`;
       this.log (`finished configuring ${this.selectedAps.length} robots.`);
