@@ -32,7 +32,8 @@ We need a way of provisioning multiple parallax activity boards equipped with Xb
   - ensure mobile network is turned off (routing issues);
 
 ## Firmware TODO
-- physical button (5sec hold) to enter configuration mode
+- [x] physical button (5sec hold) to enter configuration mode
+- detect that can't connect to current AP and go to setup mode?
 - stricter robot keymatching
 - mac@groupID
 
