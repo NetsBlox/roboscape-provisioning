@@ -2,6 +2,7 @@
 #include "ping.h"
 #include "simpletools.h"
 #include "xbee.h"
+#include "melody.h"
 
 enum {
     BUFFER_SIZE = 200,
@@ -178,7 +179,7 @@ void software_reset_xbee()
 
 void setup_mode()
 {
-    pause(1000);
+    play_music1();
     /* software_reset_xbee(); */
     print("cmd = +++\n");
     int bytes = xbcmd("+++", response, 10, 2000);
