@@ -10,7 +10,10 @@ const aMixin = {
         },
         {
           SSID: 'test ssid',
-          BSSID: 'test:bssid'
+          BSSID: 'test:bssid',
+          level: 0,
+          frequency: 0,
+          capabilities: '',
         },
       ], // live accesspoints
     };
@@ -19,6 +22,19 @@ const aMixin = {
   computed: {
     xbeeAps() {
       return this.aps.filter(ap => ap.SSID.startsWith('xbee'));
+    },
+
+    // freq, level, capabilities
+    useableAps() {
+      let isTwoGhzChannel = ap => ap.frequency < 3000;
+      let hasGoodSignal = ap => ap.level > -80;
+      let supportsPsk = ap => ap.capabilities.includes('PSK');
+      let isOpen = ap => ap.capabilities === '[ESS]';
+
+      let goodAps = this.aps
+        .filter(ap => !this.isXbeeAp(ap) && isTwoGhzChannel(ap) && hasGoodSignal(ap) && (supportsPsk(ap) || isOpen(ap)));
+
+      return goodAps;
     }
   },
 

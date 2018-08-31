@@ -67,13 +67,18 @@
 
           <!-- main content area -->
           <f7-block strong>
-            <p>Detected {{ this.aps.length }} access points including {{ this.xbeeAps.length }} robots:</p>
+            <p>Detected {{ aps.length }} access points including {{ useableAps.length }} useable access points and {{ xbeeAps.length }} configurable robots:</p>
             <div class="list simple-list">
               <ul>
                 <li v-for="ap in xbeeAps" :key="ap.BSSID" >{{ap.SSID}}</li>
               </ul>
             </div>
             <a class="link button button-fill button-raised"  href="/form/">Configure Robots</a>
+            <p>Useable strong access points:
+              <span v-for="ap in useableAps">
+                "{{ ap.SSID }}"
+              </span>
+            </p>
           </f7-block>
 
         </f7-page>
