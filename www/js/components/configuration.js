@@ -23,7 +23,26 @@ Vue.component('page-form', {
   },
 
   methods: {
+    validateConfig() {
+      let isUseable = this.useableAps.find(ap => ap.SSID === this.config.ssid);
+      if (!isUseable) {
+        let resp = confirm(`Access point "${this.config.ssid}" seems unusable or unstable are you sure?`);
+        if (resp !== true) throw new Error('bad accessspoint pick another one');
+      }
+
+      let missingEncryption = () => this.config.psk !== '' && this.config.encryption === 0;
+      if (missingEncryption()) {
+        throw new Error('missing encryption protocol');
+      }
+    },
+
     async startSetup() {
+      try {
+        this.validateConfig();
+      } catch (e) {
+        alert(e.message);
+        return;
+      }
       console.log('started configuring robots');
       console.log(this.config);
       console.log(this.selectedAps);
