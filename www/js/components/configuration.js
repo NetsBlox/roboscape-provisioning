@@ -58,7 +58,7 @@ Vue.component('page-form', {
         try {
           await this.setupRobot(ap, this.config);
         } catch (e) {
-          this.log('failed to configure', ap);
+          this.log('failed to configure', ap.SSID);
         }
       }
 
