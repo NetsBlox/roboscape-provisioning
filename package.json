@@ -5,7 +5,7 @@
     "description": "A sample Apache Cordova application that responds to the deviceready event.",
     "main": "index.js",
     "scripts": {
-        "serve": "http-server ./www/ -o -c 1 -a localhost",
+        "serve": "live-server ./www/ -o -c 1 -a localhost",
         "copy-f7": "cpy node_modules/framework7/js/*.* www/libs/framework7/js && cpy node_modules/framework7/css/*.* www/libs/framework7/css && cpy node_modules/framework7-vue/*.* www/libs/framework7-vue/ && cpy node_modules/vue/dist/*.* www/libs/vue/ && cpy node_modules/framework7-icons/fonts/*.* www/fonts && cpy node_modules/material-design-icons/iconfont/*.{eot,ttf,woff,woff2} www/fonts",
         "postinstall": "npm run copy-f7"
     },
@@ -18,7 +18,7 @@
         "cordova-plugin-hotspot": "^1.2.10",
         "cordova-plugin-whitelist": "^1.3.3",
         "cordova.plugins.diagnostic": "^4.0.11",
-        "cordova-plugin-wifiwizard": "@tecnosolve/cordova-plugin-wifiwizard@~0.2.16"
+        "cordova-plugin-wifi-wizard-tecnosolve": "~1.0.0"
     },
     "cordova": {
         "plugins": {
@@ -36,7 +36,7 @@
         "framework7": "^3.0.0",
         "framework7-icons": "^0.9.1",
         "framework7-vue": "^3.0.0",
-        "http-server": "^0.11.1",
+        "live-server": "^1.2.1",
         "material-design-icons": "^3.0.1",
         "vue": "^2.5.16"
     }
