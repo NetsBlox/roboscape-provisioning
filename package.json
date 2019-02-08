@@ -12,22 +12,10 @@
     "author": "Apache Cordova Team",
     "license": "Apache-2.0",
     "dependencies": {
-        "cordova-android": "^7.0.0",
-        "cordova-plugin-compat": "^1.2.0",
-        "cordova-plugin-hotspot": "file:../cordova-plugin-hotspot",
-        "cordova-plugin-whitelist": "^1.3.3",
-        "cordova-plugin-wifi-direct": "git+https://github.com/NeoLSN/cordova-plugin-wifi-direct.git",
-        "cordova.plugins.diagnostic": "^4.0.8",
-        "wifiwizard": "^0.2.11"
+        "cordova-android": "^7.1.1"
     },
     "cordova": {
-        "plugins": {
-            "cordova-plugin-whitelist": {},
-            "cordova-plugin-hotspot": {},
-            "cordova-plugin-wifi-direct": {},
-            "cordova.plugins.diagnostic": {},
-            "com.pylonproducts.wifiwizard": {}
-        },
+        "plugins": {},
         "platforms": [
             "android"
         ]
