@@ -47,6 +47,10 @@ If you are the groupOwner => Listen for a connection
 - what determines the group owner in WIFI Direct standard [paer](https://ieeexplore.ieee.org/document/7777908/)
 - UI for controlling and connecting to discovered nodes and configuring the settings
 
+## Troubleshooting
+- remove `/plugins` and `platform/android` directories.
+
+
 ## References
 - Xbee Api Mode:
 [supported frames](https://www.digi.com/resources/documentation/Digidocs/90001942-13/reference/r_supported_frames_zigbee.htm?TocPath=XBee%20API%20mode%7C_____3)
