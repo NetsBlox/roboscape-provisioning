@@ -81,7 +81,9 @@
               </p>
             </f7-block>
 
-            <a class="link button button-fill button-raised" href="/login/">Login</a>
+            <f7-block>
+              <a class="link button button-fill button-raised" href="/login/">Login</a>
+            </f7-block>
 
           </f7-page>
         </f7-view>
@@ -157,27 +159,38 @@
     <!-- Login Page Template -->
     <template id="page-login">
       <f7-page>
-        <f7-login-screen-title>Framework7</f7-login-screen-title>
-        <f7-list form>
-          <f7-list-input
-            label="Username"
-            type="text"
-            placeholder="Your username"
-            :value="username"
-            @input="username = $event.target.value"
-            ></f7-list-input>
-          <f7-list-input
-            label="Password"
-            type="password"
-            placeholder="Your password"
-            :value="password"
-            @input="password = $event.target.value"
-            ></f7-list-input>
-        </f7-list>
-        <f7-list>
-          <f7-list-button @click="signIn">Sign In</f7-list-button>
-          <f7-block-footer>Some text about login information.<br>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</f7-block-footer>
-        </f7-list>
+        <f7-login-screen-title>Login</f7-login-screen-title>
+        <div v-if="!profile"> <!-- if not logged in -->
+
+          <f7-list form>
+            <f7-list-input
+              label="Username"
+              type="text"
+              placeholder="Your username"
+              :value="username"
+              @input="username = $event.target.value"
+              ></f7-list-input>
+            <f7-list-input
+              label="Password"
+              type="password"
+              placeholder="Your password"
+              :value="password"
+              @input="password = $event.target.value"
+              ></f7-list-input>
+          </f7-list>
+          <f7-block>
+            <f7-button @click="login" raised fill round> sign in <f7-button>
+          </f7-block>
+        </div>
+        <div v-else> <!-- if logged in -->
+          <f7-block>
+            <f7-button @click="logout" raised fill round> Logout <f7-button>
+          </f7-block>
+        </div>
+        <f7-block>
+          <p>Server: {{ SERVER_ADDRESS }}</p>
+          <p v-if="profile" >Current user: {{ profile.username }}</p>
+        </f7-block>
       </f7-page>
     </template>
 

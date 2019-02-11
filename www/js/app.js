@@ -1,5 +1,6 @@
 const XBEE_ENDPOINT = 'http://192.168.1.10',
   XBEE_AP_PREFIX = 'xbee',
+  SERVER_ADDRESS = 'https://dev.netsblox.org',
   store = {originalAp: '', curSSID: ''};
 
 // Init F7 Vue Plugin

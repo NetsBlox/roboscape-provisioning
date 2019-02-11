@@ -6,20 +6,45 @@ Vue.component('page-login', {
     return {
       username: '',
       password: '',
+      authenticator: new AuthHandler(SERVER_ADDRESS),
+      profile: null,
     };
   },
-  created() {
-    console.log('login created');
-    // app.$f7.dialog.alert('created');
+  async created() {
+    await this.checkLoginStatus();
   },
   methods: {
-    signIn() {
-      const self = this;
-      const app = self.$f7;
-      const router = self.$f7router;
-      app.dialog.alert(`Username: ${self.username}<br>Password: ${self.password}`, () => {
+    async login() {
+      const app = this.$f7;
+      const router = this.$f7router;
+      app.dialog.preloader('logging in..');
+      try {
+        await this.authenticator.login(this.username, this.password);
         router.back();
-      });
+      } catch (e) {
+        app.dialog.alert('failed to login.');
+      } finally {
+        app.dialog.close(); // gets called before alert dialog..
+      }
     },
+
+    async logout() {
+      this.$f7.dialog.preloader('logging out..');
+      await this.authenticator.logout();
+      this.$f7.dialog.close();
+      this.$f7router.back();
+    },
+
+    // checks login status and sets the user profile
+    async checkLoginStatus() {
+      try {
+        let rv = await this.authenticator.getProfile();
+        this.profile = rv;
+        return !!rv.username;
+      } catch(e) {
+        this.profile = null;
+        return false;
+      }
+    }
   },
 });
