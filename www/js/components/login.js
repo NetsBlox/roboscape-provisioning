@@ -1,4 +1,5 @@
 // login page
+'use strict';
 
 Vue.component('page-login', {
   template: '#page-login',
