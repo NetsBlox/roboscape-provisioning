@@ -159,9 +159,8 @@
     <!-- Login Page Template -->
     <template id="page-login">
       <f7-page>
-        <f7-login-screen-title>Login</f7-login-screen-title>
-        <div v-if="!profile"> <!-- if not logged in -->
-
+        <f7-navbar title="Authentication" back-link="Back"></f7-navbar>
+        <div v-if="!sharedState.profile"> <!-- if not logged in -->
           <f7-list form>
             <f7-list-input
               label="Username"
@@ -179,7 +178,7 @@
               ></f7-list-input>
           </f7-list>
           <f7-block>
-            <f7-button @click="login" raised fill round> sign in <f7-button>
+            <f7-button @click="login" raised fill> sign in <f7-button>
           </f7-block>
         </div>
         <div v-else> <!-- if logged in -->
@@ -189,7 +188,7 @@
         </div>
         <f7-block>
           <p>Server: {{ SERVER_ADDRESS }}</p>
-          <p v-if="profile" >Current user: {{ profile.username }}</p>
+          <p v-if="sharedState.profile" >Current user: {{ sharedState.profile.username }}</p>
         </f7-block>
       </f7-page>
     </template>

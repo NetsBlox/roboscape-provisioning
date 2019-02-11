@@ -3,7 +3,13 @@
 const XBEE_ENDPOINT = 'http://192.168.1.10',
   XBEE_AP_PREFIX = 'xbee',
   SERVER_ADDRESS = 'https://dev.netsblox.org',
+  sharedStore = {
+    state: {
+      profile: null,
+    }
+  },
   store = {originalAp: '', curSSID: ''};
+
 
 // Init F7 Vue Plugin
 Framework7.use(Framework7Vue);
@@ -43,7 +49,7 @@ const app = new Vue({
           },
         ],
       }, // end of f7 parameters
-
+      sharedState: sharedStore.state,
     };
   }, // end of data
 

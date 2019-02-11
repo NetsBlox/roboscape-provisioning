@@ -8,7 +8,7 @@ Vue.component('page-login', {
       username: '',
       password: '',
       authenticator: new AuthHandler(SERVER_ADDRESS),
-      profile: null,
+      sharedState:sharedStore.state,
     };
   },
   async created() {
@@ -40,10 +40,10 @@ Vue.component('page-login', {
     async checkLoginStatus() {
       try {
         let rv = await this.authenticator.getProfile();
-        this.profile = rv;
+        this.sharedState.profile = rv;
         return !!rv.username;
       } catch(e) {
-        this.profile = null;
+        this.sharedState.profile = null;
         return false;
       }
     }
