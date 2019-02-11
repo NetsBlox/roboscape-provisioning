@@ -6,9 +6,10 @@ const XBEE_ENDPOINT = 'http://192.168.1.10',
   sharedStore = {
     state: {
       profile: null,
+      originalAp: '',
+      curSSID: '',
     }
-  },
-  store = {originalAp: '', curSSID: ''};
+  };
 
 
 // Init F7 Vue Plugin
@@ -68,7 +69,7 @@ const app = new Vue({
       this.keepApsUptodate();
 
       let curSSID = await this.updateCurSSID();
-      store.originalAp = curSSID;
+      this.sharedState.originalAp = curSSID;
 
       await this.removeXbeeConnections();
       console.debug('app ready');

@@ -16,6 +16,7 @@ const aMixin = {
           capabilities: '',
         },
       ], // live accesspoints
+      sharedState: sharedStore.state,
     };
   }, // end of data
 
@@ -42,7 +43,7 @@ const aMixin = {
     updateCurSSID() {
       return Wifi.getCurrentSSID()
         .then(ssid => {
-          store.curSSID = ssid;
+          this.sharedState.curSSID = ssid;
           return ssid;
         });
     },
@@ -88,12 +89,12 @@ const aMixin = {
         if (this.isXbeeAp(ap)) await Wifi.removeNetwork(ap);
       }
       await this.updateCurSSID();
-      if (this.isXbeeAp(store.curSSID)) { // if connected to a xbee AP
-        if (store.originalAp && !this.isXbeeAp(store.originalAp)) {
+      if (this.isXbeeAp(this.sharedState.curSSID)) { // if connected to a xbee AP
+        if (this.sharedState.originalAp && !this.isXbeeAp(this.sharedState.originalAp)) {
           // then we have a connection to connect to
-          await Wifi.connectNetwork(store.originalAp);
+          await Wifi.connectNetwork(this.sharedState.originalAp);
         } else {
-          await Wifi.disconnectNetwork(store.curSSID);
+          await Wifi.disconnectNetwork(this.sharedState.curSSID);
         }
       }
     },

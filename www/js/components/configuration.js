@@ -1,4 +1,5 @@
 // configuration component
+'use strict';
 
 Vue.component('page-config', {
   template: '#page-config',
@@ -13,7 +14,8 @@ Vue.component('page-config', {
       },
       selectedAps: [],
       status: '',
-      logs: []
+      logs: [],
+      sharedState: sharedStore.state,
     };
   }, // end of data
 
@@ -152,7 +154,7 @@ Vue.component('page-config', {
       // TODO wait until connected
       let connected = async () => {
         await this.updateCurSSID();
-        if (store.curSSID !== WifiWizard.formatWifiString(ssid)) {
+        if (this.sharedState.curSSID !== WifiWizard.formatWifiString(ssid)) {
           throw new Error(`Not connected to ${ssid} yet`);
         }
       };
@@ -164,7 +166,7 @@ Vue.component('page-config', {
     async checkConnection(ssid) {
       return new Promise(async (resolve, reject) => {
         await this.updateCurSSID();
-        if (store.curSSID !== WifiWizard.formatWifiString(ssid)) {
+        if (this.sharedState.curSSID !== WifiWizard.formatWifiString(ssid)) {
           reject('mismatching ssids');
         }
 
