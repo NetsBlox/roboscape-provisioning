@@ -49,3 +49,6 @@ UserInterfaceState.xcuserstate
 
 # framework7
 www/fonts
+
+# simple ide binaries
+src/firmware/cmm
