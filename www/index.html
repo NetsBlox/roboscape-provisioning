@@ -73,7 +73,6 @@
                   <li v-for="ap in xbeeAps" :key="ap.BSSID" >{{ap.SSID}}</li>
                 </ul>
               </div>
-              <a class="link button button-fill button-raised"  href="/form/">Configure Robots</a>
               <p>Useable strong access points:
               <span v-for="ap in useableAps">
                 "{{ ap.SSID }}"
@@ -81,7 +80,12 @@
               </p>
             </f7-block>
 
-            <f7-block>
+            <f7-block v-if="!!sharedState.profile" >
+              <a class="link button button-fill button-raised"  href="/form/">Configure Robots</a>
+              <a class="link button button-fill button-raised" @click="logout" >Logout</a>
+            </f7-block>
+
+            <f7-block v-else>
               <a class="link button button-fill button-raised" href="/login/">Login</a>
             </f7-block>
 

@@ -20,7 +20,7 @@ Vue.config.devtools = true;
 // Init App
 const app = new Vue({
   el: '#app',
-  mixins: [aMixin],
+  mixins: [aMixin, authMixin],
   data: function() {
     return {
       // Framework7 parameters here
@@ -56,7 +56,7 @@ const app = new Vue({
 
   created() {
     document.addEventListener('deviceready', this.onDeviceReady.bind(this));
-
+    this.fetchLoginStatus();
   },
 
   methods: {
