@@ -3,17 +3,19 @@
 
 Vue.component('page-login', {
   template: '#page-login',
+  mixins: [authMixin],
   data() {
     return {
       username: '',
       password: '',
-      authenticator: new AuthHandler(SERVER_ADDRESS),
       sharedState:sharedStore.state,
     };
   },
+
   async created() {
-    await this.checkLoginStatus();
+    await this.fetchLoginStatus();
   },
+
   methods: {
     async login() {
       const app = this.$f7;
@@ -21,6 +23,7 @@ Vue.component('page-login', {
       app.dialog.preloader('logging in..');
       try {
         await this.authenticator.login(this.username, this.password);
+        await this.fetchLoginStatus();
         router.back();
       } catch (e) {
         app.dialog.alert('failed to login.');
@@ -28,24 +31,5 @@ Vue.component('page-login', {
         app.dialog.close(); // gets called before alert dialog..
       }
     },
-
-    async logout() {
-      this.$f7.dialog.preloader('logging out..');
-      await this.authenticator.logout();
-      this.$f7.dialog.close();
-      this.$f7router.back();
-    },
-
-    // checks login status and sets the user profile
-    async checkLoginStatus() {
-      try {
-        let rv = await this.authenticator.getProfile();
-        this.sharedState.profile = rv;
-        return !!rv.username;
-      } catch(e) {
-        this.sharedState.profile = null;
-        return false;
-      }
-    }
   },
 });
