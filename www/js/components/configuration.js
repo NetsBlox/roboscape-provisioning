@@ -218,6 +218,25 @@ Vue.component('page-config', {
 
     turnOffMobileData() {
       // TODO
+    },
+
+    // proves/requests the server to move the robot under the user's ownership
+    async ownRobot(robotId) {
+      let res = await axios({
+        method: 'POST',
+        url: SERVER_ADDRESS + '/api/roboscape/robots',
+        // url: 'http://requestbin.fullcontact.com/1h98xma1',
+        data: {
+          robotId
+        },
+        withCredentials: true,
+      });
+      this.log(`owned robot ${robotId}`);
+    },
+
+    async ownRobots(ids) {
+      let promises = ids.map(async id => await ownRobot(id)); // WARN race cond on the server
+      await Promise.all(promises);
     }
 
   }
