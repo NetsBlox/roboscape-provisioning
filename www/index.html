@@ -82,7 +82,7 @@
 
             <f7-block v-if="!!sharedState.profile" >
               <a class="link button button-fill button-raised"  href="/form/">Configure Robots</a>
-              <a class="link button button-fill button-raised" @click="logout" >Logout</a>
+              <a class="link button button-fill button-raised" @click="logout" >Logout ({{ sharedState.profile.username }})</a>
             </f7-block>
 
             <f7-block v-else>
@@ -211,6 +211,7 @@
 
     <!-- Your custom app scripts -->
     <script src="js/utils.js"></script>
+    <script src="libs/axios/axios.min.js"></script>
     <script src="libs/nb-auth/sha512.js"></script>
     <script src="libs/nb-auth/auth.js"></script>
     <script src="js/permissions.js"></script>
