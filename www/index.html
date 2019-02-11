@@ -1,208 +1,208 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <!--
-  Customize this policy to fit your own app's needs. For more guidance, see:
+  <head>
+    <meta charset="utf-8">
+    <!--
+      Customize this policy to fit your own app's needs. For more guidance, see:
       https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
-  Some notes:
+      Some notes:
       * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
       * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
       * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-          * Enable inline JS: add 'unsafe-inline' to default-src
-  -->
-  <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: content:">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="theme-color" content="#2196f3">
-  <meta name="format-detection" content="telephone=no">
-  <meta name="msapplication-tap-highlight" content="no">
-  <title>Roboscape</title>
-  <link rel="stylesheet" href="libs/framework7/css/framework7.min.css">
-  <link rel="stylesheet" href="css/icons.css">
-  <link rel="stylesheet" href="css/app.css">
-</head>
-<body>
-  <div id="app">
-    <f7-app :params="f7params">
-      <!-- Statusbar -->
-      <f7-statusbar></f7-statusbar>
+      * Enable inline JS: add 'unsafe-inline' to default-src
+    -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: content:">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#2196f3">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="msapplication-tap-highlight" content="no">
+    <title>Roboscape</title>
+    <link rel="stylesheet" href="libs/framework7/css/framework7.min.css">
+    <link rel="stylesheet" href="css/icons.css">
+    <link rel="stylesheet" href="css/app.css">
+  </head>
+  <body>
+    <div id="app">
+      <f7-app :params="f7params">
+        <!-- Statusbar -->
+        <f7-statusbar></f7-statusbar>
 
-      <!-- Left Panel -->
-      <f7-panel left cover theme-dark> <!-- reveal or cover modes> -->
-        <f7-view id="left-panel-view">
+        <!-- Left Panel -->
+        <f7-panel left cover theme-dark> <!-- reveal or cover modes> -->
+          <f7-view id="left-panel-view">
+            <f7-page>
+              <f7-navbar title="Left Panel"></f7-navbar>
+              <f7-block strong>
+                <p>Left panel content goes here</p>
+              </f7-block>
+              <f7-block-title>Load page in panel</f7-block-title>
+              <f7-list>
+                <f7-list-item link="/about/" title="About"></f7-list-item>
+                <f7-list-item link="/form/" title="Form"></f7-list-item>
+              </f7-list>
+              <f7-block-title>Load page in main view</f7-block-title>
+              <f7-list>
+                <f7-list-item link="/about/" title="About" view="#main-view" panel-close></f7-list-item>
+                <f7-list-item link="/form/" title="Form" view="#main-view" panel-close></f7-list-item>
+              </f7-list>
+            </f7-page>
+          </f7-view>
+        </f7-panel>
+
+        <!-- Main View -->
+        <f7-view id="main-view" main>
           <f7-page>
-            <f7-navbar title="Left Panel"></f7-navbar>
+            <f7-navbar>
+              <!-- <f7-nav-left> -->
+              <!--   <f7-link icon-if-ios="f7:menu" icon-if-md="material:menu" panel-open="left"></f7-link> -->
+              <!-- </f7-nav-left> -->
+              <f7-nav-title>RoboScape Provisioning</f7-nav-title>
+            </f7-navbar>
+            <!-- <f7-toolbar> -->
+            <!--   <f7-link>Left Link</f7-link> -->
+            <!--   <f7-link>Right Link</f7-link> -->
+            <!-- </f7-toolbar> -->
+
+            <!-- main content area -->
             <f7-block strong>
-              <p>Left panel content goes here</p>
-            </f7-block>
-            <f7-block-title>Load page in panel</f7-block-title>
-            <f7-list>
-              <f7-list-item link="/about/" title="About"></f7-list-item>
-              <f7-list-item link="/form/" title="Form"></f7-list-item>
-            </f7-list>
-            <f7-block-title>Load page in main view</f7-block-title>
-            <f7-list>
-              <f7-list-item link="/about/" title="About" view="#main-view" panel-close></f7-list-item>
-              <f7-list-item link="/form/" title="Form" view="#main-view" panel-close></f7-list-item>
-            </f7-list>
-          </f7-page>
-        </f7-view>
-      </f7-panel>
-
-      <!-- Main View -->
-      <f7-view id="main-view" main>
-        <f7-page>
-          <f7-navbar>
-            <!-- <f7-nav-left> -->
-            <!--   <f7-link icon-if-ios="f7:menu" icon-if-md="material:menu" panel-open="left"></f7-link> -->
-            <!-- </f7-nav-left> -->
-            <f7-nav-title>RoboScape Provisioning</f7-nav-title>
-          </f7-navbar>
-          <!-- <f7-toolbar> -->
-          <!--   <f7-link>Left Link</f7-link> -->
-          <!--   <f7-link>Right Link</f7-link> -->
-          <!-- </f7-toolbar> -->
-
-          <!-- main content area -->
-          <f7-block strong>
-            <p>Detected {{ aps.length }} access points including {{ useableAps.length }} useable access points and {{ xbeeAps.length }} configurable robots:</p>
-            <div class="list simple-list">
-              <ul>
-                <li v-for="ap in xbeeAps" :key="ap.BSSID" >{{ap.SSID}}</li>
-              </ul>
-            </div>
-            <a class="link button button-fill button-raised"  href="/form/">Configure Robots</a>
-            <p>Useable strong access points:
+              <p>Detected {{ aps.length }} access points including {{ useableAps.length }} useable access points and {{ xbeeAps.length }} configurable robots:</p>
+              <div class="list simple-list">
+                <ul>
+                  <li v-for="ap in xbeeAps" :key="ap.BSSID" >{{ap.SSID}}</li>
+                </ul>
+              </div>
+              <a class="link button button-fill button-raised"  href="/form/">Configure Robots</a>
+              <p>Useable strong access points:
               <span v-for="ap in useableAps">
                 "{{ ap.SSID }}"
               </span>
-            </p>
-          </f7-block>
+              </p>
+            </f7-block>
 
-          <a class="link button button-fill button-raised" href="/login/">Login</a>
+            <a class="link button button-fill button-raised" href="/login/">Login</a>
 
-        </f7-page>
-      </f7-view>
+          </f7-page>
+        </f7-view>
 
-    </f7-app>
-  </div>
+      </f7-app>
+    </div>
 
-  <!-- Form Page Template -->
-  <template id="page-config">
-    <f7-page>
-      <f7-navbar title="Form" back-link="Back"></f7-navbar>
+    <!-- Form Page Template -->
+    <template id="page-config">
+      <f7-page>
+        <f7-navbar title="Form" back-link="Back"></f7-navbar>
 
-      <f7-block>
-        <p>Status: {{ status }}</p>
-      </f7-block>
+        <f7-block>
+          <p>Status: {{ status }}</p>
+        </f7-block>
 
-      <f7-block-title>Create a Confguration</f7-block-title>
-      <f7-list form>
-        <f7-list-item>
-          <f7-label>SSID</f7-label>
-          <f7-input :value="config.ssid" @input="config.ssid = $event.target.value" type="text" placeholder="access point SSID"></f7-input>
-        </f7-list-item>
-        <f7-list-item>
-          <f7-label>Select encryption</f7-label>
-          <f7-input :value="config.encryption" @input="config.encryption = $event.target.value" type="select">
-            <option value="0" selected>None</option>
-            <option value="1">WPA (TKIP)</option>
-            <option value="2">WPA2 (AES)</option>
-            <option value="3">WEP</option>
-          </f7-input>
-        </f7-list-item>
-        <f7-list-item>
-          <f7-label>PSK</f7-label>
-          <f7-input :value="config.psk" @input="config.psk = $event.target.value" type="text" placeholder="pre-shared key"></f7-input>
-        </f7-list-item>
-        <f7-list-item>
-          <f7-label>Custom data</f7-label>
-          <f7-input :value="config.payload" @input="config.payload = $event.target.value" type="text" placeholder=""></f7-input>
-        </f7-list-item>
-      </f7-list>
+        <f7-block-title>Create a Confguration</f7-block-title>
+        <f7-list form>
+          <f7-list-item>
+            <f7-label>SSID</f7-label>
+            <f7-input :value="config.ssid" @input="config.ssid = $event.target.value" type="text" placeholder="access point SSID"></f7-input>
+          </f7-list-item>
+          <f7-list-item>
+            <f7-label>Select encryption</f7-label>
+            <f7-input :value="config.encryption" @input="config.encryption = $event.target.value" type="select">
+              <option value="0" selected>None</option>
+              <option value="1">WPA (TKIP)</option>
+              <option value="2">WPA2 (AES)</option>
+              <option value="3">WEP</option>
+            </f7-input>
+          </f7-list-item>
+          <f7-list-item>
+            <f7-label>PSK</f7-label>
+            <f7-input :value="config.psk" @input="config.psk = $event.target.value" type="text" placeholder="pre-shared key"></f7-input>
+          </f7-list-item>
+          <f7-list-item>
+            <f7-label>Custom data</f7-label>
+            <f7-input :value="config.payload" @input="config.payload = $event.target.value" type="text" placeholder=""></f7-input>
+          </f7-list-item>
+        </f7-list>
 
-      <f7-block-title>Configurable Robots</f7-block-title>
-      <f7-list form>
-        <f7-list-item v-for="ap in xbeeAps"
-          :key="ap.BSSID"
-          checkbox name="ap.SSID"
-          :value="ap.SSID"
-          :checked="selectedAps.indexOf(ap.SSID) >= 0"
-          @change="checkSelectedAps"
-          :title="ap.SSID">
-        </f7-list-item>
-      </f7-list>
+        <f7-block-title>Configurable Robots</f7-block-title>
+        <f7-list form>
+          <f7-list-item v-for="ap in xbeeAps"
+                        :key="ap.BSSID"
+                        checkbox name="ap.SSID"
+                                 :value="ap.SSID"
+                                 :checked="selectedAps.indexOf(ap.SSID) >= 0"
+                                 @change="checkSelectedAps"
+                                 :title="ap.SSID">
+          </f7-list-item>
+        </f7-list>
 
-      <f7-block>
-        <f7-row tag="p">
-          <f7-button class="col" @click="startSetup" raised fill color="green">Go</f7-button>
-          <!-- <f7-button class="col" raised fill>Save (TBD)</f7-button> -->
-          <f7-button class="col" raised fill color="orange">Cancel</f7-button>
-        </f7-row>
-      </f7-block>
+        <f7-block>
+          <f7-row tag="p">
+            <f7-button class="col" @click="startSetup" raised fill color="green">Go</f7-button>
+            <!-- <f7-button class="col" raised fill>Save (TBD)</f7-button> -->
+            <f7-button class="col" raised fill color="orange">Cancel</f7-button>
+          </f7-row>
+        </f7-block>
 
-      <!-- log view -->
-      <f7-block>
-        <div class="list simple-list">
-          <ul>
-            <li v-for="log in logs">{{log.time}} {{log.text}}</li>
-          </ul>
-        </div>
-      </f7-block>
-    </f7-page>
-  </template> <!-- end of page-config -->
+        <!-- log view -->
+        <f7-block>
+          <div class="list simple-list">
+            <ul>
+              <li v-for="log in logs">{{log.time}} {{log.text}}</li>
+            </ul>
+          </div>
+        </f7-block>
+      </f7-page>
+    </template> <!-- end of page-config -->
 
-  <!-- Login Page Template -->
-  <template id="page-login">
-    <f7-page>
-      <f7-login-screen-title>Framework7</f7-login-screen-title>
-      <f7-list form>
-        <f7-list-input
-          label="Username"
-          type="text"
-          placeholder="Your username"
-          :value="username"
-          @input="username = $event.target.value"
-          ></f7-list-input>
-        <f7-list-input
-          label="Password"
-          type="password"
-          placeholder="Your password"
-          :value="password"
-          @input="password = $event.target.value"
-          ></f7-list-input>
-      </f7-list>
-      <f7-list>
-        <f7-list-button @click="signIn">Sign In</f7-list-button>
-        <f7-block-footer>Some text about login information.<br>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</f7-block-footer>
-      </f7-list>
-    </f7-page>
-  </template>
+    <!-- Login Page Template -->
+    <template id="page-login">
+      <f7-page>
+        <f7-login-screen-title>Framework7</f7-login-screen-title>
+        <f7-list form>
+          <f7-list-input
+            label="Username"
+            type="text"
+            placeholder="Your username"
+            :value="username"
+            @input="username = $event.target.value"
+            ></f7-list-input>
+          <f7-list-input
+            label="Password"
+            type="password"
+            placeholder="Your password"
+            :value="password"
+            @input="password = $event.target.value"
+            ></f7-list-input>
+        </f7-list>
+        <f7-list>
+          <f7-list-button @click="signIn">Sign In</f7-list-button>
+          <f7-block-footer>Some text about login information.<br>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</f7-block-footer>
+        </f7-list>
+      </f7-page>
+    </template>
 
-  <!-- Cordova -->
-  <script src="cordova.js"></script>
+    <!-- Cordova -->
+    <script src="cordova.js"></script>
 
-  <!-- Framework7 library -->
-  <script src="libs/framework7/js/framework7.min.js"></script>
+    <!-- Framework7 library -->
+    <script src="libs/framework7/js/framework7.min.js"></script>
 
-  <!-- Vue -->
-  <script src="libs/vue/vue.min.js"></script>
+    <!-- Vue -->
+    <script src="libs/vue/vue.min.js"></script>
 
-  <!-- Framework7-Vue plugin -->
-  <script src="libs/framework7-vue/framework7-vue.min.js"></script>
+    <!-- Framework7-Vue plugin -->
+    <script src="libs/framework7-vue/framework7-vue.min.js"></script>
 
-  <!-- Your custom app scripts -->
-  <script src="js/utils.js"></script>
-  <script src="libs/nb-auth/sha512.js"></script>
-  <script src="libs/nb-auth/auth.js"></script>
-  <script src="js/permissions.js"></script>
-  <script src="js/wifi.js"></script>
-  <script src="js/wifidirect.js"></script>
-  <script src="js/mixins.js"></script>
-  <script src="js/components/configuration.js"></script>
-  <script src="js/components/login.js"></script>
-  <script src="js/app.js"></script>
-</body>
+    <!-- Your custom app scripts -->
+    <script src="js/utils.js"></script>
+    <script src="libs/nb-auth/sha512.js"></script>
+    <script src="libs/nb-auth/auth.js"></script>
+    <script src="js/permissions.js"></script>
+    <script src="js/wifi.js"></script>
+    <script src="js/wifidirect.js"></script>
+    <script src="js/mixins.js"></script>
+    <script src="js/components/configuration.js"></script>
+    <script src="js/components/login.js"></script>
+    <script src="js/app.js"></script>
+  </body>
 </html>
