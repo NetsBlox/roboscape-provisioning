@@ -1,7 +1,7 @@
 // configuration component
 
-Vue.component('page-form', {
-  template: '#page-form',
+Vue.component('page-config', {
+  template: '#page-config',
   mixins: [aMixin],
   data: function() {
     return {

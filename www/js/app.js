@@ -28,7 +28,7 @@ const app = new Vue({
           },
           {
             path: '/form/',
-            component: 'page-form'
+            component: 'page-config'
           },
           {
             path: '/login/',
