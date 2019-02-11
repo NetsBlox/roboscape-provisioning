@@ -81,25 +81,13 @@
             </p>
           </f7-block>
 
+          <a class="link button button-fill button-raised" href="/login/">Login</a>
+
         </f7-page>
       </f7-view>
 
     </f7-app>
   </div>
-
-  <!-- About Page Template -->
-  <template id="page-about">
-    <f7-page>
-      <f7-navbar title="About" back-link="Back"></f7-navbar>
-      <f7-block-title>About My App</f7-block-title>
-      <f7-block strong>
-        <p>Here is About page!</p>
-        <p>You can go <f7-link back>back</f7-link>.</p>
-        <p>Mauris posuere sit amet metus id venenatis. Ut ante dolor, tempor nec commodo rutrum, varius at sem. Nullam ac nisi non neque ornare pretium. Nulla mauris mauris, consequat et elementum sit amet, egestas sed orci. In hac habitasse platea dictumst.</p>
-        <p>Fusce eros lectus, accumsan eget mi vel, iaculis tincidunt felis. Nulla tincidunt pharetra sagittis. Fusce in felis eros. Nulla sit amet aliquam lorem, et gravida ipsum. Mauris consectetur nisl non sollicitudin tristique. Praesent vitae metus ac quam rhoncus mattis vel et nisi. Aenean aliquet, felis quis dignissim iaculis, lectus quam tincidunt ligula, et venenatis turpis risus sed lorem. Morbi eu metus elit. Ut vel diam dolor.</p>
-      </f7-block>
-    </f7-page>
-  </template>
 
   <!-- Form Page Template -->
   <template id="page-form">
@@ -164,6 +152,33 @@
         </div>
       </f7-block>
     </f7-page>
+  </template> <!-- end of page-form -->
+
+  <!-- Login Page Template -->
+  <template id="page-login">
+    <f7-page>
+      <f7-login-screen-title>Framework7</f7-login-screen-title>
+      <f7-list form>
+        <f7-list-input
+          label="Username"
+          type="text"
+          placeholder="Your username"
+          :value="username"
+          @input="username = $event.target.value"
+          ></f7-list-input>
+        <f7-list-input
+          label="Password"
+          type="password"
+          placeholder="Your password"
+          :value="password"
+          @input="password = $event.target.value"
+          ></f7-list-input>
+      </f7-list>
+      <f7-list>
+        <f7-list-button @click="signIn">Sign In</f7-list-button>
+        <f7-block-footer>Some text about login information.<br>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</f7-block-footer>
+      </f7-list>
+    </f7-page>
   </template>
 
   <!-- Cordova -->
@@ -187,6 +202,7 @@
   <script src="js/wifidirect.js"></script>
   <script src="js/mixins.js"></script>
   <script src="js/components/configuration.js"></script>
+  <script src="js/components/login.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

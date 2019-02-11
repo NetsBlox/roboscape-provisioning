@@ -5,10 +5,7 @@ const XBEE_ENDPOINT = 'http://192.168.1.10',
 // Init F7 Vue Plugin
 Framework7.use(Framework7Vue);
 
-// Init Page Components
-Vue.component('page-about', {
-  template: '#page-about'
-});
+Vue.config.devtools = true;
 
 // Init App
 const app = new Vue({
@@ -34,8 +31,8 @@ const app = new Vue({
             component: 'page-form'
           },
           {
-            path: '/dynamic-route/blog/:blogId/post/:postId/',
-            component: 'page-dynamic-routing'
+            path: '/login/',
+            component: 'page-login'
           },
           {
             path: '(.*)',
