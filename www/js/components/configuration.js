@@ -20,6 +20,13 @@ Vue.component('page-config', {
   }, // end of data
 
   async created() {
+    // load the prev conf
+    let prevConf = window.localStorage.getItem('ssidConfig');
+    if (prevConf) {
+      prevConf = JSON.parse(prevConf);
+      this.config = prevConf;
+    }
+
     app.$f7.dialog.alert('Make sure mobile data is turned off.');
     this.keepLiveRobotsFresh(2000); // TODO auto stop when leaving the page
   },
@@ -39,6 +46,8 @@ Vue.component('page-config', {
     },
 
     async startSetup() {
+
+      // make sure the configuration is received and is correct
       try {
         this.validateConfig();
       } catch (e) {
@@ -49,9 +58,11 @@ Vue.component('page-config', {
       console.log(this.config);
       console.log(this.selectedAps);
 
-      // TODO make sure the configuration is received and is correct
-
       // TODO lock the configuration (disable changes)
+
+      // save the conf
+      window.localStorage.setItem('ssidConfig', JSON.stringify(this.config));
+
 
       // TODO connect to each AP and submit the form
       this.log('configuring', this.selectedAps.length, 'robot(s)');
