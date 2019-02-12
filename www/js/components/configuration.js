@@ -60,7 +60,7 @@ Vue.component('page-config', {
         try {
           await this.setupRobot(ap, this.config);
         } catch (e) {
-          this.log('failed to configure', ap.SSID);
+          this.log('failed to configure', ap.SSID); // FIXME gets triggered when there is no failure
         }
       }
 
@@ -237,6 +237,17 @@ Vue.component('page-config', {
     async ownRobots(ids) {
       let promises = ids.map(async id => await ownRobot(id)); // WARN race cond on the server
       await Promise.all(promises);
+    },
+
+    // checks for live connected robots
+    async getMyLiveRobots() {
+      const { data } = await axios({
+        url: SERVER_ADDRESS + '/rpc//RoboScape/getRobots?uuid=FAKE_CLIENT_ID&projectId=FAKE_ID',
+        method: 'post',
+        data: {},
+        withCredentials: true,
+      });
+      return data;
     }
 
   }
