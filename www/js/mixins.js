@@ -3,26 +3,13 @@
 const aMixin = {
   data: function() {
     return {
-      aps: [ // TODO this is not shared between different components. Switch to using Wifi.aps. sharedStore?
-        {
-          SSID: 'xbee-23423 test ssid',
-          BSSID: 'test:bssid'
-        },
-        {
-          SSID: 'test ssid',
-          BSSID: 'test:bssid',
-          level: 0,
-          frequency: 0,
-          capabilities: '',
-        },
-      ], // live accesspoints
       sharedState: sharedStore.state,
     };
   }, // end of data
 
   computed: {
     xbeeAps() {
-      return this.aps.filter(ap => ap.SSID.startsWith('xbee'));
+      return this.sharedState.aps.filter(ap => ap.SSID.startsWith('xbee'));
     },
 
     // freq, level, capabilities
@@ -32,7 +19,7 @@ const aMixin = {
       let supportsPsk = ap => ap.capabilities.includes('PSK');
       let isOpen = ap => ap.capabilities === '[ESS]';
 
-      let goodAps = this.aps
+      let goodAps = this.sharedState.aps
         .filter(ap => !this.isXbeeAp(ap) && isTwoGhzChannel(ap) && hasGoodSignal(ap) && (supportsPsk(ap) || isOpen(ap)));
 
       return goodAps;
@@ -46,24 +33,6 @@ const aMixin = {
           this.sharedState.curSSID = ssid;
           return ssid;
         });
-    },
-
-    // updates the reference to live accesspoints
-    // it's done this way because since I couldn't get 'computed' to auto update properly.
-    keepApsUptodate() {
-      try {
-        if (cordova) { // if cordova is availabe then we are on a device
-          this.aps = Wifi.aps;
-          document.addEventListener('scanresults', this.onScanResults.bind(this));
-          return Wifi.aps;
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    },
-
-    onScanResults(event) {
-      this.aps = Wifi.aps; // we already have a handle to it and just want to be notified of updates
     },
 
 

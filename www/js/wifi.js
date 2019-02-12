@@ -1,4 +1,5 @@
 'use strict';
+/* global sharedStore */
 // wifi manipulation helpers
 
 const Wifi = {
@@ -51,6 +52,7 @@ const Wifi = {
       WifiWizard.getScanResults(undefined, visibleAps => {
         // TODO append, update, merge or overwrite current aps
         this.aps = visibleAps;
+        sharedStore.state.aps = visibleAps;
         let event = new CustomEvent('scanresults', {
           detail: visibleAps
         });

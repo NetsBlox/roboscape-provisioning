@@ -20,7 +20,6 @@ Vue.component('page-config', {
   }, // end of data
 
   async created() {
-    this.keepApsUptodate();
     app.$f7.dialog.alert('Make sure mobile data is turned off.');
     this.keepLiveRobotsFresh(2000); // TODO auto stop when leaving the page
   },
@@ -194,7 +193,7 @@ Vue.component('page-config', {
     async setupRobot(ssid, config) {
       if (!config) throw new Error('missing the configuration');
       // check if it's still visible
-      let targetAp = this.aps.find(ap => ap.SSID === ssid);
+      let targetAp = this.sharedState.aps.find(ap => ap.SSID === ssid);
       if (!targetAp) throw new Error(`AP ${ssid} is not visible.`); // or assert?
 
       // CHECK this should resolve after the connection is fully established

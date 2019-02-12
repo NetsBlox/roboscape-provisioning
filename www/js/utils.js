@@ -1,4 +1,25 @@
 // waits for a sync fn
+const sharedStore = {
+  state: {
+    profile: null,
+    originalAp: '',
+    curSSID: '',
+    aps: [
+      {
+        SSID: 'xbee-23423 test ssid',
+        BSSID: 'test:bssid'
+      },
+      {
+        SSID: 'test ssid',
+        BSSID: 'test:bssid',
+        level: 0,
+        frequency: 0,
+        capabilities: '',
+      },
+    ], // live accesspoints
+  }
+};
+
 function waitUntil(fn, maxWait) {
   return new Promise((resolve, reject) => {
     var startTime = Date.now();

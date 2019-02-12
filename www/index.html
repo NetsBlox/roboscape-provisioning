@@ -67,7 +67,7 @@
 
             <!-- main content area -->
             <f7-block strong>
-              <p>Detected {{ aps.length }} access points including {{ useableAps.length }} useable access points and {{ xbeeAps.length }} configurable robots:</p>
+              <p>Detected {{ sharedState.aps.length }} access points including {{ useableAps.length }} useable access points and {{ xbeeAps.length }} configurable robots:</p>
               <div class="list simple-list">
                 <ul>
                   <li v-for="ap in xbeeAps" :key="ap.BSSID" >{{ap.SSID}}</li>
@@ -133,7 +133,7 @@
           </f7-list-item>
         </f7-list>
 
-        <f7-block-title>Configurable Robots</f7-block-title>
+        <f7-block-title>Configurable Robots ({{ xbeeAps.length }}):</f7-block-title>
         <f7-list form>
           <f7-list-item v-for="ap in xbeeAps"
                         :key="ap.BSSID"
@@ -145,7 +145,7 @@
           </f7-list-item>
         </f7-list>
 
-        <f7-block-title>My Live Robots</f7-block-title>
+        <f7-block-title>My Live Robots ({{ liveRobots.length }}):</f7-block-title>
         <f7-list simple-list>
           <f7-list-item v-for="rId in liveRobots"
                         :key="rId"
