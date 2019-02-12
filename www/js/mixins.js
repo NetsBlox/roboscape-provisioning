@@ -3,7 +3,7 @@
 const aMixin = {
   data: function() {
     return {
-      aps: [ // TODO this is not shared between different components. Switch to using Wifi.aps
+      aps: [ // TODO this is not shared between different components. Switch to using Wifi.aps. sharedStore?
         {
           SSID: 'xbee-23423 test ssid',
           BSSID: 'test:bssid'
@@ -133,4 +133,65 @@ const authMixin = {
     },
 
   }
+};
+
+
+const robotMixin = {
+
+  data: () => {
+    return {
+      liveRobots: [],
+    };
+  },
+
+  methods: {
+    // proves/requests the server to move the robot under the user's ownership
+    async ownRobot(robotId) {
+      let res = await axios({
+        method: 'POST',
+        url: SERVER_ADDRESS + '/api/roboscape/robots',
+        // url: 'http://requestbin.fullcontact.com/1h98xma1',
+        data: {
+          robotId
+        },
+        withCredentials: true,
+      });
+    },
+
+    async ownRobots(ids) {
+      let promises = ids.map(async id => await ownRobot(id)); // WARN race cond on the server
+      await Promise.all(promises);
+    },
+
+    // checks for live connected robots
+    async getMyLiveRobots() {
+      const { data } = await axios({
+        url: SERVER_ADDRESS + '/rpc//RoboScape/getRobots?uuid=FAKE_CLIENT_ID&projectId=FAKE_ID',
+        method: 'post',
+        data: {},
+        withCredentials: true,
+      });
+      return data;
+    },
+
+    // checks live robots on an interval
+    keepLiveRobotsFresh(delay=1000) {
+      let intervalHandle = setInterval(async () => {
+        let robots = await this.getMyLiveRobots();
+        this.liveRobots = robots;
+      }, delay);
+      return intervalHandle;
+    },
+
+    async getMyRobots() {
+      const { data } = await axios({
+        url: SERVER_ADDRESS + '/api/roboscape/robots',
+        method: 'post',
+        data: {},
+        withCredentials: true,
+      });
+      return data;
+    }
+  }
+
 };

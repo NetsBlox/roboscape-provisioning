@@ -3,7 +3,7 @@
 
 Vue.component('page-config', {
   template: '#page-config',
-  mixins: [aMixin],
+  mixins: [aMixin, robotMixin],
   data: function() {
     return {
       config: {
@@ -19,9 +19,10 @@ Vue.component('page-config', {
     };
   }, // end of data
 
-  created() {
+  async created() {
     this.keepApsUptodate();
     app.$f7.dialog.alert('Make sure mobile data is turned off.');
+    this.keepLiveRobotsFresh(2000); // TODO auto stop when leaving the page
   },
 
   methods: {
@@ -140,7 +141,7 @@ Vue.component('page-config', {
         if (opts.encryption) config.EE = opts.encryption;
         if (opts.psk) config.PK = opts.psk; // TODO sanity check for open enc and psk
       }
-      if (opts.payload) config.EQ = opts.payload;
+      if (opts.payload) config.EQ = opts.payload; // sets the FQDN readable with xbee IQ command
       return config;
     },
 
@@ -220,38 +221,7 @@ Vue.component('page-config', {
       // TODO
     },
 
-    // proves/requests the server to move the robot under the user's ownership
-    async ownRobot(robotId) {
-      let res = await axios({
-        method: 'POST',
-        url: SERVER_ADDRESS + '/api/roboscape/robots',
-        // url: 'http://requestbin.fullcontact.com/1h98xma1',
-        data: {
-          robotId
-        },
-        withCredentials: true,
-      });
-      this.log(`owned robot ${robotId}`);
-    },
-
-    async ownRobots(ids) {
-      let promises = ids.map(async id => await ownRobot(id)); // WARN race cond on the server
-      await Promise.all(promises);
-    },
-
-    // checks for live connected robots
-    async getMyLiveRobots() {
-      const { data } = await axios({
-        url: SERVER_ADDRESS + '/rpc//RoboScape/getRobots?uuid=FAKE_CLIENT_ID&projectId=FAKE_ID',
-        method: 'post',
-        data: {},
-        withCredentials: true,
-      });
-      return data;
-    }
-
   }
-
 
 });
 
