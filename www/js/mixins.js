@@ -112,6 +112,7 @@ const robotMixin = {
   data: () => {
     return {
       liveRobots: [],
+      ownedRobots: [],
     };
   },
 
@@ -130,6 +131,12 @@ const robotMixin = {
     },
 
     async ownRobots(ids) {
+      let curRobots = await this.getMyRobots();
+      if (curRobots) {
+        let curIds = curRobots.map(r => r.robotId);
+        ids = ids.filter(id => !curIds.includes(id)); // process only unowned robots
+      }
+
       let promises = ids.map(async id => await ownRobot(id)); // WARN race cond on the server
       await Promise.all(promises);
     },
@@ -161,6 +168,7 @@ const robotMixin = {
         data: {},
         withCredentials: true,
       });
+      this.ownedRobots = data;
       return data;
     }
   }
