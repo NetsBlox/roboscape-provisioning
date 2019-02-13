@@ -6,15 +6,18 @@ const sharedStore = {
     curSSID: '',
     aps: [
       {
-        SSID: 'xbee-23423 test ssid',
-        BSSID: 'test:bssid'
+        SSID: 'xbee-111111111111',
+        BSSID: 'test:bssid',
+        level: 0,
+        frequency: 0,
+        capabilities: ['PSK'],
       },
       {
         SSID: 'test ssid',
         BSSID: 'test:bssid',
         level: 0,
         frequency: 0,
-        capabilities: '',
+        capabilities: ['PSK'],
       },
     ], // live accesspoints
   }

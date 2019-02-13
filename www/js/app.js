@@ -3,7 +3,7 @@
 const XBEE_ENDPOINT = 'http://192.168.1.10',
   // SERVER_ADDRESS = 'https://dev.netsblox.org',
   SERVER_ADDRESS = 'https://editor2.vandycloud.tk',
-  XBEE_AP_PREFIX = 'xbee';
+  XBEE_AP_PREFIX = 'xbee-';
 
 
 // Init F7 Vue Plugin

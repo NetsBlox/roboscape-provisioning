@@ -9,7 +9,7 @@ const aMixin = {
 
   computed: {
     xbeeAps() {
-      return this.sharedState.aps.filter(ap => ap.SSID.startsWith('xbee'));
+      return this.sharedState.aps.filter(ap => this.isXbeeAp(ap));
     },
 
     // freq, level, capabilities
@@ -44,7 +44,9 @@ const aMixin = {
         ssid = input.SSID;
       }
       ssid = ssid.replace('"', '');
-      if (ssid.startsWith(XBEE_AP_PREFIX)) return true;
+      if (ssid.startsWith(XBEE_AP_PREFIX)
+        && ssid.length === XBEE_AP_PREFIX.length + 12)
+        return true;
 
       // if all checks failed
       return false;
