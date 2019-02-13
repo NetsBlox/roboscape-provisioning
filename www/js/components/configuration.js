@@ -63,6 +63,10 @@ Vue.component('page-config', {
       // save the conf
       window.localStorage.setItem('ssidConfig', JSON.stringify(this.config));
 
+      // get the robot ids
+      const ids = this.selectedAps.map(ap => ap.replace(XBEE_AP_PREFIX, ''));
+      // announce ownership of the robots
+      await this.ownRobots(ids);
 
       // TODO connect to each AP and submit the form
       this.log('configuring', this.selectedAps.length, 'robot(s)');
