@@ -137,7 +137,7 @@ const robotMixin = {
         ids = ids.filter(id => !curIds.includes(id)); // process only unowned robots
       }
 
-      let promises = ids.map(async id => await ownRobot(id)); // WARN race cond on the server
+      let promises = ids.map(async id => await this.ownRobot(id)); // WARN race cond on the server
       await Promise.all(promises);
     },
 
@@ -164,7 +164,7 @@ const robotMixin = {
     async getMyRobots() {
       const { data } = await axios({
         url: SERVER_ADDRESS + '/api/roboscape/robots',
-        method: 'post',
+        method: 'get',
         data: {},
         withCredentials: true,
       });
