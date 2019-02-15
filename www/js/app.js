@@ -1,9 +1,9 @@
 'use strict';
 
 const XBEE_ENDPOINT = 'http://192.168.1.10',
-  // SERVER_ADDRESS = 'https://dev.netsblox.org',
-  SERVER_ADDRESS = 'https://editor2.vandycloud.tk',
   XBEE_AP_PREFIX = 'xbee-';
+
+let SERVER_ADDRESS = window.localStorage.getItem('serverAddress') || 'https://dev.netsblox.org';
 
 
 // Init F7 Vue Plugin
@@ -54,6 +54,22 @@ const app = new Vue({
   },
 
   methods: {
+    async promptServerChange() {
+      let newServer = prompt('What is the server address you want to connect to?');
+      if (!newServer) return; // cancel
+      try {
+        await axios.post(newServer + '/api', {
+          api: false,
+          return_user: false,
+          silent: true,
+        });
+        SERVER_ADDRESS = newServer;
+        window.localStorage.setItem('serverAddress', newServer);
+        // TODO handle the authentication status change
+      } catch (e) {
+        alert('failed to set the server: address unreachable.');
+      }
+    },
     async onDeviceReady() { // only runs when cordova is available
       console.debug('cordova ready');
 

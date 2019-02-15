@@ -66,6 +66,7 @@ Vue.component('page-config', {
       // get the robot ids
       const ids = this.selectedAps.map(ap => ap.replace(XBEE_AP_PREFIX, ''));
       // announce ownership of the robots
+      // needs connection to the server (internet)
       await this.ownRobots(ids);
 
       // TODO connect to each AP and submit the form
