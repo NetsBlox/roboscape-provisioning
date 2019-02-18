@@ -29,7 +29,8 @@ We need a way of provisioning multiple parallax activity boards equipped with Xb
     - show current status (configuring which robot, status of previous ones) on UI
   - [x] add a self contained way of setting up one robot with status update (and retry?)
   - [x] batch the process for more than one AP
-  - ensure mobile network is turned off (routing issues);
+  - [ ] ensure mobile network is turned off (routing issues);
+  - [ ] connect to the same network as before after batch config
 - show wifi aps with good signal quality
 - validate wifi config before submitting (maybe confirm with user?)
 - issue with connecting to some strong wifis
