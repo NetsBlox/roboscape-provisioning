@@ -82,7 +82,6 @@ const app = new Vue({
       Perms.ensureLocPerm(); // async
       const SCAN_INTERVAL = 1000 * 5;
       Wifi.startDiscovering(SCAN_INTERVAL);
-      this.keepApsUptodate();
 
       let curSSID = await this.updateCurSSID();
       this.sharedState.originalAp = curSSID;
