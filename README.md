@@ -31,6 +31,9 @@ We need a way of provisioning multiple parallax activity boards equipped with Xb
   - [x] batch the process for more than one AP
   - [ ] ensure mobile network is turned off (routing issues);
   - [ ] connect to the same network as before after batch config
+  - [ ] capture back button on the phone
+  - [ ] connection detection issues
+  - [ ] firmware beep feedback
 - show wifi aps with good signal quality
 - validate wifi config before submitting (maybe confirm with user?)
 - issue with connecting to some strong wifis
