@@ -38,10 +38,6 @@ const app = new Vue({
             path: '/login/',
             component: 'page-login'
           },
-          {
-            path: '(.*)',
-            component: 'page-not-found',
-          },
         ],
       }, // end of f7 parameters
       sharedState: sharedStore.state,
@@ -76,6 +72,7 @@ const app = new Vue({
         this.$f7.dialog.alert('failed to set the server: address unreachable.');
       }
     },
+
     async onDeviceReady() { // only runs when cordova is available
       console.debug('cordova ready');
 
@@ -83,12 +80,29 @@ const app = new Vue({
       const SCAN_INTERVAL = 1000 * 5;
       Wifi.startDiscovering(SCAN_INTERVAL);
 
+      // capture backbutton
+      document.addEventListener('backbutton', this.onBackButton.bind(this));
+
       let curSSID = await this.updateCurSSID();
       this.sharedState.originalAp = curSSID;
 
       await this.removeXbeeConnections();
       console.debug('app ready');
     },
+
+    onBackButton() {
+      const router = app.$f7.views.current.router;
+      const isOnMainPage = () => {
+        // find non main page routes..
+        const nonMainRoutes = this.f7params.routes.map(o => o.path);
+        return ! nonMainRoutes.includes(router.currentRoute.route.path);
+      };
+      if (isOnMainPage()) {
+        navigator.app.exitApp();
+      } else {
+        router.back();
+      }
+    }
 
   }
 });

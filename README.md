@@ -26,16 +26,16 @@ We need a way of provisioning multiple parallax activity boards equipped with Xb
   - [x] scope the global helpers methods to avoid collison
   - [x] add xhr post request function to set the desired configurations (axios post a form)
   - [x] add a UI
-    - show current status (configuring which robot, status of previous ones) on UI
+    - [x] show current status (configuring which robot, status of previous ones) on UI
   - [x] add a self contained way of setting up one robot with status update (and retry?)
   - [x] batch the process for more than one AP
   - [ ] ensure mobile network is turned off (routing issues);
-  - [ ] connect to the same network as before after batch config
-  - [ ] capture back button on the phone
-  - [ ] connection detection issues
+  - [x] connect to the same network as before after batch config
+  - [x] capture back button on the phone
+  - [x] connection detection issues
   - [ ] firmware beep feedback
-- show wifi aps with good signal quality
-- validate wifi config before submitting (maybe confirm with user?)
+- [x] show wifi aps with good signal quality
+- [x] validate wifi config before submitting (maybe confirm with user?)
 - issue with connecting to some strong wifis
 
 ## Firmware TODO
