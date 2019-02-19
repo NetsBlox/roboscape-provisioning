@@ -77,7 +77,7 @@ const app = new Vue({
       console.debug('cordova ready');
 
       Perms.ensureLocPerm(); // async
-      const SCAN_INTERVAL = 1000 * 5;
+      const SCAN_INTERVAL = 1000 * 3;
       Wifi.startDiscovering(SCAN_INTERVAL);
 
       // capture backbutton
