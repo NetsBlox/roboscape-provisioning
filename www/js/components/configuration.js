@@ -57,8 +57,7 @@ Vue.component('page-config', {
         return;
       }
       console.log('started configuring robots');
-      console.log(this.config);
-      console.log(this.selectedAps);
+      console.log({config: this.config, selectedAps: this.selectedAps});
 
       // TODO lock the configuration (disable changes)
 
@@ -78,7 +77,7 @@ Vue.component('page-config', {
         try {
           await this.setupRobot(ap, this.config);
         } catch (e) {
-          console.error(e);
+          console.error(`failed to configure ${ap.SSID}`, e);
           this.log('failed to configure', ap.SSID); // FIXME gets triggered when there is no failure
         }
       }
@@ -92,6 +91,7 @@ Vue.component('page-config', {
     },
 
     log(msg) {
+      console.log('app log:', msg);
       this.logs.push({
         time: new Date().toTimeString().match(/[0-9:]+/)[0],
         text: msg
@@ -131,7 +131,7 @@ Vue.component('page-config', {
 
         xhr.addEventListener('readystatechange', function () {
           if (xhr.readyState === 4) {
-            console.log(this.responseText);
+            console.log('form submit response', this.responseText);
             if (xhr.status >= 200 && xhr.status < 300) {
               resolve(xhr);
             } else {
