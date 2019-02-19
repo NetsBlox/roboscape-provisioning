@@ -12,6 +12,7 @@ Vue.component('page-config', {
         psk: '',
         payload: ''
       },
+      originalSsid: '',
       selectedAps: [],
       status: '',
       logs: [],
@@ -22,6 +23,7 @@ Vue.component('page-config', {
   async created() {
     // load the prev conf
     let prevConf = window.localStorage.getItem('ssidConfig');
+    this.originalSsid = await Wifi.getCurrentSSID();
     if (prevConf) {
       prevConf = JSON.parse(prevConf);
       this.config = prevConf;
@@ -69,23 +71,24 @@ Vue.component('page-config', {
       // needs connection to the server (internet)
       await this.ownRobots(ids);
 
-      // TODO connect to each AP and submit the form
+      // connect to each AP and submit the form
       this.log('configuring', this.selectedAps.length, 'robot(s)');
       for (let i=0; i<this.selectedAps.length; i++) {
         let ap = this.selectedAps[i];
         try {
           await this.setupRobot(ap, this.config);
         } catch (e) {
+          console.error(e);
           this.log('failed to configure', ap.SSID); // FIXME gets triggered when there is no failure
         }
       }
 
-      // TODO show per AP status text
       // TODO auto retry for unconfigured robots
 
       this.status = `finished configuring ${this.selectedAps.length} robots.`;
       this.log (`finished configuring ${this.selectedAps.length} robots.`);
       this.removeXbeeConnections();
+      await this.reconnectToOriginal();
     },
 
     log(msg) {
@@ -161,7 +164,7 @@ Vue.component('page-config', {
     },
 
     // connects to a xbee softap
-    async connect(ssid) {
+    async connectXbee(ssid) {
       await Wifi.removeNetwork(ssid);
       // add network to known networks
       await Wifi.addOpenNetwork(ssid);
@@ -215,7 +218,7 @@ Vue.component('page-config', {
       // CHECK this should resolve after the connection is fully established
       this.status = `connecting to ${ssid}`;
       this.log(`connecting to ${ssid}`);
-      await this.connect(targetAp.SSID);
+      await this.connectXbee(targetAp.SSID);
 
       this.status = `verifying connection with ${ssid}`;
       this.log(`verifying connection with ${ssid}`);
@@ -235,6 +238,13 @@ Vue.component('page-config', {
     turnOffMobileData() {
       // TODO
     },
+
+    // reconnects to the initial access point
+    async reconnectToOriginal() {
+      if (this.originalSsid === '') return; // wasn't intially connected
+      await Wifi.connectNetwork(this.originalSsid);
+      console.log('connected to the original accesspoint', this.originalSsid);
+    }
 
   }
 
