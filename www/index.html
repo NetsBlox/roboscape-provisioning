@@ -139,8 +139,8 @@
                         :key="ap.BSSID"
                         checkbox name="ap.SSID"
                                  :value="ap.SSID"
-                                 :checked="selectedAps.indexOf(ap.SSID) >= 0"
-                                 @change="checkSelectedAps"
+                                 :checked="selectedSsids.indexOf(ap.SSID) >= 0"
+                                 @change="checkSelectedSsids"
                                  :title="ap.SSID">
           </f7-list-item>
         </f7-list>

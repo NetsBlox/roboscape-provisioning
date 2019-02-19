@@ -13,7 +13,7 @@ Vue.component('page-config', {
         payload: ''
       },
       originalSsid: '',
-      selectedAps: [],
+      selectedSsids: [],
       status: '',
       logs: [],
       sharedState: sharedStore.state,
@@ -56,8 +56,8 @@ Vue.component('page-config', {
         alert(e.message);
         return;
       }
-      console.log('started configuring robots');
-      console.log({config: this.config, selectedAps: this.selectedAps});
+      console.log('started configuring robots:');
+      console.log({config: this.config, selectedSsids: this.selectedSsids});
 
       // TODO lock the configuration (disable changes)
 
@@ -65,46 +65,46 @@ Vue.component('page-config', {
       window.localStorage.setItem('ssidConfig', JSON.stringify(this.config));
 
       // get the robot ids
-      const ids = this.selectedAps.map(ap => ap.replace(XBEE_AP_PREFIX, ''));
+      const ids = this.selectedSsids.map(ssid => ssid.replace(XBEE_AP_PREFIX, ''));
       // announce ownership of the robots
       // needs connection to the server (internet)
       await this.ownRobots(ids);
 
       // connect to each AP and submit the form
-      this.log('configuring', this.selectedAps.length, 'robot(s)');
-      for (let i=0; i<this.selectedAps.length; i++) {
-        let ap = this.selectedAps[i];
+      this.log('configuring', this.selectedSsids.length, 'robot(s)');
+      for (let ssid of this.selectedSsids) {
         try {
-          await this.setupRobot(ap, this.config);
+          await this.setupRobot(ssid, this.config);
         } catch (e) {
-          console.error(`failed to configure ${ap.SSID}`, e);
-          this.log('failed to configure', ap.SSID); // FIXME gets triggered when there is no failure
+          console.error('failed to setup', ssid, e);
+          this.log('failed to setup', ssid); // FIXME gets triggered when there is no failure
         }
       }
 
       // TODO auto retry for unconfigured robots
 
-      this.status = `finished configuring ${this.selectedAps.length} robots.`;
-      this.log (`finished configuring ${this.selectedAps.length} robots.`);
+      this.status = `finished configuring ${this.selectedSsids.length} robots.`;
+      this.log (`finished configuring ${this.selectedSsids.length} robots.`);
       await this.removeXbeeConnections();
       await this.reconnectToOriginal();
     },
 
-    log(msg) {
-      console.log('app log:', msg);
+    log() {
+      let msgs = Array.from(arguments);
+      console.log.apply(console, ['app log:', ...msgs]);
       this.logs.push({
         time: new Date().toTimeString().match(/[0-9:]+/)[0],
-        text: msg
+        text: msgs.join(', '),
       });
     },
 
-    checkSelectedAps() {
+    checkSelectedSsids() {
       const self = this;
       const value = event.target.value;
       if (event.target.checked) {
-        self.selectedAps.push(value);
+        self.selectedSsids.push(value);
       } else {
-        self.selectedAps.splice(self.selectedAps.indexOf(value), 1);
+        self.selectedSsids.splice(self.selectedSsids.indexOf(value), 1);
       }
     },
 
