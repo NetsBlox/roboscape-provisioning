@@ -99,12 +99,11 @@ Vue.component('page-config', {
     },
 
     checkSelectedSsids() {
-      const self = this;
       const value = event.target.value;
       if (event.target.checked) {
-        self.selectedSsids.push(value);
+        this.selectedSsids.push(value);
       } else {
-        self.selectedSsids.splice(self.selectedSsids.indexOf(value), 1);
+        this.selectedSsids.splice(this.selectedSsids.indexOf(value), 1);
       }
     },
 
