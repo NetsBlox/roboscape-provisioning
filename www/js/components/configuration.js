@@ -86,7 +86,7 @@ Vue.component('page-config', {
 
       this.status = `finished configuring ${this.selectedAps.length} robots.`;
       this.log (`finished configuring ${this.selectedAps.length} robots.`);
-      this.removeXbeeConnections();
+      await this.removeXbeeConnections();
       await this.reconnectToOriginal();
     },
 
@@ -171,35 +171,35 @@ Vue.component('page-config', {
       await Wifi.connectNetwork(ssid);
 
       // TODO wait until connected
-      let connected = async () => {
+      let hasMatchingSsid = async () => {
         await this.updateCurSSID();
-        if (this.sharedState.curSSID !== WifiWizard.formatWifiString(ssid)) {
-          throw new Error(`Not connected to ${ssid} yet`);
-        }
+        console.log('does ssid match?', this.sharedState.curSSID, WifiWizard.formatWifiString(ssid));
+        return this.sharedState.curSSID === WifiWizard.formatWifiString(ssid);
       };
-      await waitUntilPromise(connected.bind(this), 10000);
+      await waitUntilPromiseTF(hasMatchingSsid.bind(this), {maxWait: 10000});
+      console.log('stopped waiting for ssids to match');
 
-      await sleep(3000); // also needed since matching ssid names doens't mean an established connection
+      this.status = `verifying connection with ${ssid}`;
+      this.log(`verifying connection with ${ssid}`);
+      await waitUntilPromiseTF(this.canMakeGetRequest.bind(this));
     },
 
-    async checkConnection(ssid) {
+    // checks whether we can make a get request or not
+    async canMakeGetRequest() {
+      const REQUEST_TIMEOUT = 200; // ms
       return new Promise(async (resolve, reject) => {
-        await this.updateCurSSID();
-        if (this.sharedState.curSSID !== WifiWizard.formatWifiString(ssid)) {
-          reject('mismatching ssids');
-        }
 
         var xhr = new XMLHttpRequest();
-        xhr.timeout = 1000 * 5; // 5s timeout
+        xhr.timeout = REQUEST_TIMEOUT;
 
         xhr.addEventListener('readystatechange', function () {
           if (xhr.readyState === 4) {
             if (xhr.status >= 200 && xhr.status < 300) {
-              resolve(xhr);
+              resolve(true);
             } else {
               let err = new Error(xhr.statusText || 'Unsuccessful Xhr response');
               err.xhr = xhr;
-              reject(err);
+              resolve(false);
             }
           }
         });
@@ -220,14 +220,9 @@ Vue.component('page-config', {
       this.log(`connecting to ${ssid}`);
       await this.connectXbee(targetAp.SSID);
 
-      this.status = `verifying connection with ${ssid}`;
-      this.log(`verifying connection with ${ssid}`);
-      await this.checkConnection(targetAp.SSID);
-
-      let xbeeConf = this._generateXbeeConfig(config);
-
       this.status = `configuring robot ${ssid}`;
       this.log(`configuring robot ${ssid}`);
+      let xbeeConf = this._generateXbeeConfig(config);
       let res = await this.submitForm(xbeeConf);
       this.status = `configured robot ${ssid}`;
       this.log(`configured robot ${ssid}`);
