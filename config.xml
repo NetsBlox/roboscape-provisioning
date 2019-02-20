@@ -38,5 +38,6 @@
     <plugin name="cordova-plugin-hotspot" spec="^1.2.10" />
     <plugin name="cordova.plugins.diagnostic" spec="^4.0.11" />
     <plugin name="cordova-plugin-wifiwizard" spec="@tecnosolve/cordova-plugin-wifiwizard@~0.2.16" />
+    <plugin name="cordova-plugin-ping" spec="^0.4.0" />
     <engine name="android" spec="^7.1.4" />
 </widget>

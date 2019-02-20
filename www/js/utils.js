@@ -58,13 +58,13 @@ async function waitUntilPromiseTF(fn, opts) {
     let rv = await fn(opts.params); // assuming the function also has a reasonable timeout of its own
     if (rv === true) {
       return true;
-    } 
+    }
     if (Date.now()-startTime > opts.maxWait) {
       throw new Error('timed out');
     } else {
       await sleep(opts.delayPerCheck); // WARN way slower than setTimeout
     }
-    
+
   }
 }
 
@@ -98,3 +98,16 @@ function sleep(duration) {
     setTimeout(resolve, duration);
   });
 }
+
+function ping(addr, timeout=250) {
+  let pingPromise =  new Promise((resolve, reject) => {
+    let p, success, err, ipList;
+    ipList = [{query: addr, timeout: 1, retry: 1, version:'v4'}];
+    p = new Ping();
+    p.ping(ipList, resolve, reject);
+  })
+
+  let timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), timeout));
+  return Promise.race([pingPromise, timeoutPromise]);
+}
+
