@@ -99,12 +99,20 @@ function sleep(duration) {
   });
 }
 
+// pings a single addr
 function ping(addr, timeout=250) {
   let pingPromise = new Promise((resolve, reject) => {
     let p, success, err, ipList;
     ipList = [{query: addr, timeout: 1, retry: 1, version:'v4'}];
     p = new Ping();
-    p.ping(ipList, resolve, reject);
+    p.ping(ipList, results => {
+      let resp = results[0].response;
+      if (resp.status === 'success') {
+        resolve(resp);
+      } else {
+        reject(resp);
+      }
+    }, reject);
   });
 
   let timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), timeout));
