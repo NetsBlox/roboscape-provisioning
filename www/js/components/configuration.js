@@ -112,21 +112,20 @@ Vue.component('page-config', {
     // submits the robot form given the key,value pairs
     // inp: data: key values with keys being valid xbee key
     submitForm(config) {
-      var keyValPair = Object.keys(config)
+
+      const POST_TIMEOUT = 10e3;
+      const isSuccessfulResponse = resp => (resp.indexOf('<title>Success</title>') !== -1);
+
+      // create the submission string
+      const keyValPair = Object.keys(config)
         .map(key => {
           // maybe sanitize
           return `${key}=${config[key]}`;
         })
         .join('&');
 
-      return this._submitFormXhr(keyValPair);
-    },
-
-    _submitFormXhr(str) {
-      const POST_TIMEOUT = 10e3;
-      const isSuccessfulResponse = resp => (resp.indexOf('<title>Success</title>') !== -1);
       return new Promise((resolve, reject) => {
-        var data = str;
+        var data = keyValPair;
 
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
@@ -135,10 +134,11 @@ Vue.component('page-config', {
         xhr.addEventListener('readystatechange', function () {
           if (xhr.readyState === 4) {
             console.log('form submit response', this.responseText);
+            // FIXME should the response status 0 and '' response text be considered successful?
             if (xhr.status >= 200 && xhr.status < 300 && isSuccessfulResponse(this.responseText)) {
               resolve(xhr);
             } else {
-              let err = new Error(xhr.statusText || 'Unsuccessful Xhr response');
+              let err = new Error(xhr.statusText || `Unsuccessful Xhr response status: ${xhr.status}`);
               err.xhr = xhr;
               reject(err);
             }
@@ -151,6 +151,7 @@ Vue.component('page-config', {
 
         xhr.send(data);
       });
+
     },
 
     // opts: {ssid, encryption, psk, payload}
@@ -167,9 +168,8 @@ Vue.component('page-config', {
     },
 
     async pingTest() {
-      let res;
       try {
-        res = await ping(XBEE_IP, 300); // 300ms timeout
+        await ping(XBEE_IP, 300); // 300ms timeout
         return true;
       } catch (e) {
         return false;
