@@ -60,7 +60,7 @@ async function waitUntilPromiseTF(fn, opts) {
       return true;
     }
     if (Date.now()-startTime > opts.maxWait) {
-      throw new Error('timed out');
+      throw new Error(`timeout: ${msg}`);
     } else {
       await sleep(opts.delayPerCheck); // WARN way slower than setTimeout
     }
