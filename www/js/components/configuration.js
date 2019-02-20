@@ -3,7 +3,7 @@
 
 Vue.component('page-config', {
   template: '#page-config',
-  mixins: [aMixin, robotMixin],
+  mixins: [aMixin, robotMixin, xbeeMixins],
   data: function() {
     return {
       config: {
@@ -16,6 +16,7 @@ Vue.component('page-config', {
       selectedSsids: [],
       status: '',
       logs: [],
+      isExecuting: false,
       sharedState: sharedStore.state,
     };
   }, // end of data
@@ -78,6 +79,7 @@ Vue.component('page-config', {
     },
 
     async startSetup() {
+      this.isExecuting = true;
 
       // make sure the configuration is received and is correct
       try {
@@ -123,6 +125,8 @@ Vue.component('page-config', {
       this.log (`finished configuring ${this.selectedSsids.length} robots.`);
       await this.removeXbeeConnections();
       await this.reconnectToOriginal();
+
+      this.isExecuting = false;
     },
 
   } // end of methods

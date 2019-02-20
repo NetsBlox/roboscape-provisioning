@@ -113,11 +113,13 @@
         <f7-list form>
           <f7-list-item>
             <f7-label>SSID</f7-label>
-            <f7-input :value="config.ssid" @input="config.ssid = $event.target.value" type="text" placeholder="access point SSID"></f7-input>
+            <f7-input :value="config.ssid" @input="config.ssid = $event.target.value" type="text" placeholder="access point SSID" :disabled="isExecuting"></f7-input>
           </f7-list-item>
           <f7-list-item>
             <f7-label>Select encryption</f7-label>
-            <f7-input :value="config.encryption" @input="config.encryption = $event.target.value" type="select">
+            <f7-input :value="config.encryption"
+              @input="config.encryption = $event.target.value" type="select"
+              :disabled="isExecuting">
               <option value="0" selected>None</option>
               <option value="1">WPA (TKIP)</option>
               <option value="2">WPA2 (AES)</option>
@@ -126,9 +128,9 @@
           </f7-list-item>
           <f7-list-item>
             <f7-label>PSK</f7-label>
-            <f7-input :value="config.psk" @input="config.psk = $event.target.value" type="text" placeholder="pre-shared key"></f7-input>
+            <f7-input :disabled="isExecuting" :value="config.psk" @input="config.psk = $event.target.value" type="text" placeholder="pre-shared key"></f7-input>
           </f7-list-item>
-          <f7-list-item>
+          <f7-list-item class="hidden">
             <f7-label>Custom data</f7-label>
             <f7-input :value="config.payload" @input="config.payload = $event.target.value" type="text" placeholder=""></f7-input>
           </f7-list-item>

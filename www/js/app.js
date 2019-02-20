@@ -51,8 +51,11 @@ const app = new Vue({
 
   created() {
     document.addEventListener('deviceready', this.onDeviceReady.bind(this));
-    if (this.runningInBrowser()) this.loaded = true;
     this.fetchLoginStatus();
+  },
+
+  mounted() {
+    if (this.runningInBrowser()) this.loaded = true;
   },
 
   methods: {

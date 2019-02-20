@@ -6,6 +6,6 @@ disable-browser-longtap {
 }
 
 .hidden {
-  /* display: none; */
+  display: none;
   visibility: hidden;
 }
