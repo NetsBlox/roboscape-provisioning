@@ -70,7 +70,13 @@ Vue.component('page-config', {
       const ids = this.selectedSsids.map(ssid => ssid.replace(XBEE_AP_PREFIX, ''));
       // announce ownership of the robots
       // needs connection to the server (internet)
-      await this.ownRobots(ids);
+      this.log(`verifying ownership of ${ids.length} robots..`);
+      try {
+        await this.ownRobots(ids);
+      } catch (e) {
+        this.log(`connectivity issue with the server: ${SERVER_ADDRESS}`);
+        throw e;
+      }
 
       // connect to each AP and submit the form
       this.log('configuring', this.selectedSsids.length, 'robot(s)');
