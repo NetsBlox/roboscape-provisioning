@@ -114,7 +114,12 @@ Vue.component('page-config', {
     submitForm(config) {
 
       const POST_TIMEOUT = 10e3;
-      const isSuccessfulResponse = resp => (resp.indexOf('<title>Success</title>') !== -1);
+
+      const isConsideredSuccess = xhr => {
+        let hasSuccess = xhr.status >= 200 && xhr.status < 300 && xhr.responseText.indexOf('<title>Success</title>') !== -1;
+        let isCase0 = xhr.status === 0 && xhr.responseText === '';
+        return hasSuccess || isCase0;
+      };
 
       // create the submission string
       const keyValPair = Object.keys(config)
@@ -125,17 +130,17 @@ Vue.component('page-config', {
         .join('&');
 
       return new Promise((resolve, reject) => {
-        var data = keyValPair;
+        let data = keyValPair;
 
-        var xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
         xhr.timeout = POST_TIMEOUT;
 
         xhr.addEventListener('readystatechange', function () {
           if (xhr.readyState === 4) {
-            console.log('form submit response', this.responseText);
+            console.log('form submit response', xhr.responseText);
             // FIXME should the response status 0 and '' response text be considered successful?
-            if (xhr.status >= 200 && xhr.status < 300 && isSuccessfulResponse(this.responseText)) {
+            if (isConsideredSuccess(xhr)) {
               resolve(xhr);
             } else {
               let err = new Error(xhr.statusText || `Unsuccessful Xhr response status: ${xhr.status}`);
