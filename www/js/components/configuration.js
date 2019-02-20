@@ -30,7 +30,6 @@ Vue.component('page-config', {
     }
 
     app.$f7.dialog.alert('Make sure mobile data is turned off.');
-    // TODO create a robot status page within the app?
     // WARN requests made when connected to the xbee module might block other requests
     // this.keepLiveRobotsFresh(3000); // TODO auto stop when leaving the page
   },
@@ -67,8 +66,8 @@ Vue.component('page-config', {
       }
     },
 
-    turnOffMobileData() {
-      // TODO
+    isMobileDataOn() {
+      // TODO check and only notify the user if it is on. (routing issues)
     },
 
     // reconnects to the initial access point

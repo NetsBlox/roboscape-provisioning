@@ -29,7 +29,8 @@ We need a way of provisioning multiple parallax activity boards equipped with Xb
     - [x] show current status (configuring which robot, status of previous ones) on UI
   - [x] add a self contained way of setting up one robot with status update (and retry?)
   - [x] batch the process for more than one AP
-  - [ ] ensure mobile network is turned off (routing issues);
+  - [ ] check mobile network status;
+    - check mobile network status and warn. can't control it programmatically [link](https://developer.android.com/reference/android/net/ConnectivityManager)
   - [x] connect to the same network as before after batch config
   - [x] capture back button on the phone
   - [x] connection detection issues
