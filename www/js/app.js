@@ -1,7 +1,8 @@
 'use strict';
 
-const XBEE_ENDPOINT = 'http://192.168.1.10',
-  XBEE_AP_PREFIX = 'xbee-';
+const XBEE_IP = '192.168.1.10';
+const XBEE_ENDPOINT = 'http://' + XBEE_IP;
+const XBEE_AP_PREFIX = 'xbee-';
 
 let SERVER_ADDRESS = window.localStorage.getItem('serverAddress') || 'https://dev.netsblox.org';
 
