@@ -22,6 +22,9 @@ const app = new Vue({
       f7params: {
         root: '#app', // App root element
         id: 'edu.vanderbilt.roboscape', // App bundle ID
+        touch: {
+          tapHold: true, // enable tap hold events
+        },
         name: 'Roboscape', // App name
         theme: 'auto', // Automatic theme detection
         pushState: true,

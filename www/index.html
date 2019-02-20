@@ -90,7 +90,7 @@
               <a class="link button button-fill button-raised" href="/login/">Login</a>
             </f7-block>
             <f7-block-footer>
-              <p @click="promptServerChange">Target server: {{ SERVER_ADDRESS }}</p>
+              <p class="disable-browser-longtap" @taphold="promptServerChange">Target server: {{ SERVER_ADDRESS }}</p>
             </f7-block-footer>
 
           </f7-page>

@@ -1,1 +1,6 @@
 /* Your app styles here */
+disable-browser-longtap {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
