@@ -121,17 +121,19 @@ Vue.component('page-config', {
     },
 
     _submitFormXhr(str) {
+      const POST_TIMEOUT = 10e3;
+      const isSuccessfulResponse = resp => (resp.indexOf('<title>Success</title>') !== -1);
       return new Promise((resolve, reject) => {
         var data = str;
 
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
-        xhr.timeout = 1000 * 5; // 5s timeout
+        xhr.timeout = POST_TIMEOUT;
 
         xhr.addEventListener('readystatechange', function () {
           if (xhr.readyState === 4) {
             console.log('form submit response', this.responseText);
-            if (xhr.status >= 200 && xhr.status < 300) {
+            if (xhr.status >= 200 && xhr.status < 300 && isSuccessfulResponse(this.responseText)) {
               resolve(xhr);
             } else {
               let err = new Error(xhr.statusText || 'Unsuccessful Xhr response');
