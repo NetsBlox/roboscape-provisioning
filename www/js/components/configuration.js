@@ -186,14 +186,13 @@ Vue.component('page-config', {
       // TODO wait until connected
       let hasMatchingSsid = async () => {
         await this.updateCurSSID();
-        console.log('does ssid match?', this.sharedState.curSSID, WifiWizard.formatWifiString(ssid));
         return this.sharedState.curSSID === WifiWizard.formatWifiString(ssid);
       };
-      await waitUntilPromiseTF(hasMatchingSsid.bind(this), {maxWait: 5000});
+      await waitUntilPromiseTF(hasMatchingSsid.bind(this), {maxWait: 15000, msg: `could not connect to the access point ${ssid}`});
 
       this.status = `verifying connection with ${ssid}..`;
       this.log(`verifying connection with ${ssid}..`);
-      await waitUntilPromiseTF(this.pingTest.bind(this), {maxWait: 5000, delayPerCheck: 200});
+      await waitUntilPromiseTF(this.pingTest.bind(this), {maxWait: 5000, delayPerCheck: 300, msg: 'could not ping the xbee module'});
     },
 
     async setupRobot(ssid, config) {
@@ -208,7 +207,8 @@ Vue.component('page-config', {
       try {
         await this.connectXbee(targetAp.SSID);
       } catch (e) {
-        throw new Error(`failed to connect to ${targetAp.SSID}`);
+        console.error(`failed to connect to ${targetAp.SSID}`);
+        throw e;
       }
       this.status = `configuring robot ${ssid}..`;
       this.log(`configuring robot ${ssid}..`);
