@@ -100,14 +100,38 @@ function sleep(duration) {
 }
 
 function ping(addr, timeout=250) {
-  let pingPromise =  new Promise((resolve, reject) => {
+  let pingPromise = new Promise((resolve, reject) => {
     let p, success, err, ipList;
     ipList = [{query: addr, timeout: 1, retry: 1, version:'v4'}];
     p = new Ping();
     p.ping(ipList, resolve, reject);
-  })
+  });
 
   let timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), timeout));
   return Promise.race([pingPromise, timeoutPromise]);
 }
 
+
+
+let testVal = false;
+
+function setWait(dur) {
+  return async () => {
+    console.log('checking..');
+    await sleep(dur);
+    return testVal;
+    console.log('did my wait thingy');
+  };
+}
+
+async function testWait(dur) {
+  console.log('starting to wait');
+  await waitUntilPromise(setWait(dur), {maxWait:5000});
+  console.log('finished waiting');
+}
+
+async function testWaitTF(dur) {
+  console.log('starting to wait');
+  await waitUntilPromiseTF(setWait(dur), {maxWait:5000});
+  console.log('finished waiting, val is true now', testVal);
+}
