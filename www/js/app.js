@@ -45,11 +45,13 @@ const app = new Vue({
         ],
       }, // end of f7 parameters
       sharedState: sharedStore.state,
+      loaded: false,
     };
   }, // end of data
 
   created() {
     document.addEventListener('deviceready', this.onDeviceReady.bind(this));
+    if (this.runningInBrowser()) this.loaded = true;
     this.fetchLoginStatus();
   },
 
@@ -77,8 +79,13 @@ const app = new Vue({
       }
     },
 
+    runningInBrowser() {
+      return !window.cordova;
+    },
+
     async onDeviceReady() { // only runs when cordova is available
       console.debug('cordova ready');
+      this.loaded = true;
 
       Perms.ensureLocPerm(); // async
       const SCAN_INTERVAL = 1000 * 3;

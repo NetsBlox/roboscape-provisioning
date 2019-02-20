@@ -4,3 +4,8 @@ disable-browser-longtap {
   -webkit-user-select: none;
   user-select: none;
 }
+
+.hidden {
+  /* display: none; */
+  visibility: hidden;
+}

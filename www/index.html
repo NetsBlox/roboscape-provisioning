@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="css/app.css">
   </head>
   <body>
-    <div id="app">
+    <div id="app" v-bind:class="{ hidden: !loaded }">
       <f7-app :params="f7params">
         <!-- Statusbar -->
         <f7-statusbar></f7-statusbar>
@@ -58,7 +58,7 @@
               <!-- <f7-nav-left> -->
               <!--   <f7-link icon-if-ios="f7:menu" icon-if-md="material:menu" panel-open="left"></f7-link> -->
               <!-- </f7-nav-left> -->
-              <f7-nav-title>RoboScape Provisioning</f7-nav-title>
+              <f7-nav-title>Roboscape Provisioning</f7-nav-title>
             </f7-navbar>
             <!-- <f7-toolbar> -->
             <!--   <f7-link>Left Link</f7-link> -->
@@ -83,11 +83,12 @@
             <f7-block v-if="!!sharedState.profile" >
               <a class="link button button-fill button-raised"  href="/form/">Configure Robots</a>
               <br></br>
-              <a class="link button button-fill button-raised" @click="logout" >Logout ({{ sharedState.profile.username }})</a>
+              <f7-button class="link button button-fill button-raised" @click="logout" color="red">Logout ({{ sharedState.profile.username }})</f7-button>
             </f7-block>
 
             <f7-block v-else>
-              <a class="link button button-fill button-raised" href="/login/">Login</a>
+
+              <f7-button class="link button button-fill button-raised" href="/login/" color="green">Login</f7-button>
             </f7-block>
             <f7-block-footer>
               <p class="disable-browser-longtap" @taphold="promptServerChange">Target server: {{ SERVER_ADDRESS }}</p>
@@ -194,12 +195,12 @@
               ></f7-list-input>
           </f7-list>
           <f7-block>
-            <f7-button @click="login" raised fill> sign in <f7-button>
+            <f7-button @click="login" raised fill color="green">Login<f7-button>
           </f7-block>
         </div>
         <div v-else> <!-- if logged in -->
           <f7-block>
-            <f7-button @click="logout" raised fill round> Logout <f7-button>
+            <f7-button @click="logout" raised fill round color="red">Logout<f7-button>
           </f7-block>
         </div>
         <f7-block>
