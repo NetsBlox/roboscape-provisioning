@@ -149,14 +149,20 @@ const robotMixin = {
         data: {},
         withCredentials: true,
       });
+      this.liveRobots = robots;
       return data;
     },
 
     // checks live robots on an interval
-    keepLiveRobotsFresh(delay=1000) {
+    keepLiveRobotsFresh(delay=5000) {
       let intervalHandle = setInterval(async () => {
-        let robots = await this.getMyLiveRobots();
-        this.liveRobots = robots;
+        try {
+          let robots = await this.getMyLiveRobots();
+          this.liveRobots = robots;
+        } catch (e) {
+          // fail silently
+          console.debug('failed to fetch live robots');
+        }
       }, delay);
       return intervalHandle;
     },
