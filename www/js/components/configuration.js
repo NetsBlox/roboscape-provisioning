@@ -187,37 +187,11 @@ Vue.component('page-config', {
         console.log('does ssid match?', this.sharedState.curSSID, WifiWizard.formatWifiString(ssid));
         return this.sharedState.curSSID === WifiWizard.formatWifiString(ssid);
       };
-      await waitUntilPromiseTF(hasMatchingSsid.bind(this), {maxWait: 10000});
-      console.log('stopped waiting for ssids to match');
+      await waitUntilPromiseTF(hasMatchingSsid.bind(this), {maxWait: 5000});
 
-      this.status = `verifying connection with ${ssid}`;
-      this.log(`verifying connection with ${ssid}`);
-      await waitUntilPromiseTF(this.canMakeGetRequest.bind(this));
-    },
-
-    // checks whether we can make a get request or not
-    async canMakeGetRequest() {
-      const REQUEST_TIMEOUT = 200; // ms
-      return new Promise(async (resolve, reject) => {
-
-        var xhr = new XMLHttpRequest();
-        xhr.timeout = REQUEST_TIMEOUT;
-
-        xhr.addEventListener('readystatechange', function () {
-          if (xhr.readyState === 4) {
-            if (xhr.status >= 200 && xhr.status < 300) {
-              resolve(true);
-            } else {
-              let err = new Error(xhr.statusText || 'Unsuccessful Xhr response');
-              err.xhr = xhr;
-              resolve(false);
-            }
-          }
-        });
-
-        xhr.open('GET', XBEE_ENDPOINT);
-        xhr.send();
-      });
+      this.status = `verifying connection with ${ssid}..`;
+      this.log(`verifying connection with ${ssid}..`);
+      await waitUntilPromiseTF(this.pingTest.bind(this), {maxWait: 5000, delayPerCheck: 200});
     },
 
     async setupRobot(ssid, config) {
@@ -227,12 +201,15 @@ Vue.component('page-config', {
       if (!targetAp) throw new Error(`AP ${ssid} is not visible.`); // or assert?
 
       // CHECK this should resolve after the connection is fully established
-      this.status = `connecting to ${ssid}`;
-      this.log(`connecting to ${ssid}`);
-      await this.connectXbee(targetAp.SSID);
-
-      this.status = `configuring robot ${ssid}`;
-      this.log(`configuring robot ${ssid}`);
+      this.status = `connecting to ${ssid}..`;
+      this.log(`connecting to ${ssid}..`);
+      try {
+        await this.connectXbee(targetAp.SSID);
+      } catch (e) {
+        throw new Error(`failed to connect to ${targetAp.SSID}`);
+      }
+      this.status = `configuring robot ${ssid}..`;
+      this.log(`configuring robot ${ssid}..`);
       let xbeeConf = this._generateXbeeConfig(config);
       let res = await this.submitForm(xbeeConf);
       this.status = `configured robot ${ssid}`;
