@@ -164,6 +164,16 @@ Vue.component('page-config', {
       return config;
     },
 
+    async pingTest() {
+      let res;
+      try {
+        res = await ping(XBEE_IP, 300); // 300ms timeout
+        return true;
+      } catch (e) {
+        return false;
+      }
+    },
+
     // connects to a xbee softap
     async connectXbee(ssid) {
       await Wifi.removeNetwork(ssid);
