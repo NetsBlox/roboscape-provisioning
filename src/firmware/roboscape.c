@@ -173,14 +173,14 @@ void software_reset_xbee()
     pause(1000);
     xbee_send_api(xbee, "\8\000FR", 4);
     display_incoming();
-    pause(15000);
+    pause(5000);
     print("finished resetting xbee\n");
 }
 
 void setup_mode()
 {
     play_music1();
-    /* software_reset_xbee(); */
+    software_reset_xbee();
     print("cmd = +++\n");
     int bytes = xbcmd("+++", response, 10, 2000);
     if(bytes == 0)
