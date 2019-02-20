@@ -35,7 +35,7 @@ const app = new Vue({
             component: 'page-about'
           },
           {
-            path: '/form/',
+            path: '/setup/',
             component: 'page-config'
           },
           {

@@ -40,12 +40,12 @@
               <f7-block-title>Load page in panel</f7-block-title>
               <f7-list>
                 <f7-list-item link="/about/" title="About"></f7-list-item>
-                <f7-list-item link="/form/" title="Form"></f7-list-item>
+                <f7-list-item link="/setup/" title="Setup"></f7-list-item>
               </f7-list>
               <f7-block-title>Load page in main view</f7-block-title>
               <f7-list>
                 <f7-list-item link="/about/" title="About" view="#main-view" panel-close></f7-list-item>
-                <f7-list-item link="/form/" title="Form" view="#main-view" panel-close></f7-list-item>
+                <f7-list-item link="/setup/" title="Setup" view="#main-view" panel-close></f7-list-item>
               </f7-list>
             </f7-page>
           </f7-view>
@@ -81,7 +81,7 @@
             </f7-block>
 
             <f7-block v-if="!!sharedState.profile" >
-              <a class="link button button-fill button-raised"  href="/form/">Configure Robots</a>
+              <a class="link button button-fill button-raised"  href="/setup/">Configure Robots</a>
               <br></br>
               <f7-button class="link button button-fill button-raised" @click="logout" color="red">Logout ({{ sharedState.profile.username }})</f7-button>
             </f7-block>
@@ -100,10 +100,10 @@
       </f7-app>
     </div>
 
-    <!-- Form Page Template -->
+    <!-- Setup Page Template -->
     <template id="page-config">
       <f7-page>
-        <f7-navbar title="Form" back-link="Back"></f7-navbar>
+        <f7-navbar title="Setup" back-link="Back"></f7-navbar>
 
         <f7-block>
           <p>Status: {{ status }}</p>
