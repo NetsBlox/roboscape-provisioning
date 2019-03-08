@@ -1,6 +1,12 @@
 'use strict';
 
+// needs main mixins
 const xbeeMixins = {
+  data: function() {
+    return {
+      sharedState: sharedStore.state,
+    };
+  }, // end of data
 
   methods: {
 
