@@ -51,7 +51,8 @@ Vue.component('page-config', {
 
     log() {
       let msgs = Array.from(arguments);
-      console.log.apply(console, ['app log:', ...msgs]);
+      msgs.unshift('app log:');
+      console.log.apply(console, msgs);
       this.logs.push({
         time: new Date().toTimeString().match(/[0-9:]+/)[0],
         text: msgs.join(', '),

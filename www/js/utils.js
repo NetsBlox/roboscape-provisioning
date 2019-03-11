@@ -45,12 +45,11 @@ function waitUntil(fn, maxWait) {
 
 // wait until the async function returns true
 async function waitUntilPromiseTF(fn, opts) {
-  opts = {
+  opts = Object.assign({
     maxWait: 5000,
     delayPerCheck: 300,
     params: [],
-    ...opts, // WARN doesn't supported nested merging
-  };
+  }, opts);
 
   const startTime = Date.now();
 
@@ -70,12 +69,11 @@ async function waitUntilPromiseTF(fn, opts) {
 
 // wait until the async function resolves
 async function waitUntilPromise(fn, opts) {
-  opts = {
+  opts = Object.assign({
     maxWait: 5000,
     delayPerCheck: 300,
     params: [],
-    ...opts, // WARN doesn't supported nested merging
-  };
+  }, opts);
   let startTime = Date.now();
   let check = async () => {
     try {
