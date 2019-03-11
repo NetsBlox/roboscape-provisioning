@@ -37,8 +37,8 @@ We need a way of provisioning multiple parallax activity boards equipped with Xb
   - [ ] firmware beep feedback
 - [x] show wifi aps with good signal quality
 - [x] validate wifi config before submitting (maybe confirm with user?)
-- [ ] internet or server connectivity check
-- issue with connecting to some strong wifis
+- [ ] Internet or server connectivity check
+- [x] test again after mixin refactoring
 
 ## Firmware TODO
 - [x] physical button (5sec hold) to enter configuration mode
