@@ -1,6 +1,8 @@
 # Roboscape Provisioning Tool
 We need a way of provisioning multiple parallax activity boards equipped with Xbee S6B with initial configuration w/ no pre existing communication medium.
 
+Get roboscape on [Google Play](https://play.google.com/store/apps/details?id=edu.vanderbilt.roboscape)
+
 ## Possible Solutions
 1. Viral
 2. wifi direct (p2p) [android only], no[?] wifi-direct standard on Xbee S6B module
