@@ -16,6 +16,7 @@ Vue.component('page-config', {
       selectedSsids: [],
       status: '',
       logs: [],
+      verifyOwnership: 'false',
       isExecuting: false,
       sharedState: sharedStore.state,
     };
@@ -30,7 +31,6 @@ Vue.component('page-config', {
       this.config = prevConf;
     }
 
-    app.$f7.dialog.alert('Make sure mobile data is turned off.');
     // WARN requests made when connected to the xbee module might block other requests
     // this.keepLiveRobotsFresh(3000); // TODO auto stop when leaving the page
   },
@@ -113,7 +113,35 @@ Vue.component('page-config', {
       this.log (`finished configuring ${this.selectedSsids.length} robots.`);
       await this.removeXbeeConnections();
       await this.reconnectToOriginal();
+    },
 
+    async startSetupBtn() {
+      this.isExecuting = true;
+
+      // make sure the configuration is received and is correct
+      try {
+        this.validateConfig();
+      } catch (e) {
+        alert(e.message);
+        return;
+      }
+      this.log('starting the setup process');
+      console.log({config: this.config, selectedSsids: this.selectedSsids});
+
+      // TODO lock the configuration (disable changes)
+
+      // save the conf
+      window.localStorage.setItem('ssidConfig', JSON.stringify(this.config));
+
+      if (this.verifyOwnership === 'true') {
+        let dialogMsg = 'Make sure the server is reachable before proceeding (most likely means make sure that your phone has internet access)';
+        app.$f7.dialog.confirm(dialogMsg, async () => await this.performRobotOwnership());
+      }
+
+      let dialogMsg = 'Make sure mobile data is off before proceeding';
+      app.$f7.dialog.confirm(dialogMsg, async () => await this.configureRobots());
+
+      this.log('finished setup');
       this.isExecuting = false;
     },
 

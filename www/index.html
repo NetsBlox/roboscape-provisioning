@@ -106,10 +106,10 @@
         <f7-navbar title="Setup" back-link="Back"></f7-navbar>
 
         <f7-block>
-          <p>Status: {{ status }}</p>
+          <p v-show="status">Status: {{ status }}</p>
         </f7-block>
 
-        <f7-block-title>Create a Confguration</f7-block-title>
+        <f7-block-title>Access Point Settings</f7-block-title>
         <f7-list form>
           <f7-list-item>
             <f7-label>SSID</f7-label>
@@ -136,6 +136,35 @@
           </f7-list-item>
         </f7-list>
 
+        <f7-block-title>Extra</f7-block-title>
+        <f7-list form>
+          <f7-list-item>
+            <f7-label>
+              Verify ownership ?
+            </f7-label>
+            <f7-input>
+            Yes
+            <f7-radio
+              name="verifyOwnership"
+              value="true"
+              :checked="verifyOwnership === 'true'"
+              @change="verifyOwnership = $event.target.value"
+              ></f7-radio>
+
+            No
+            <f7-radio
+              name="verifyOwnership"
+              value="false"
+              :checked="verifyOwnership === 'false'"
+              @change="verifyOwnership = $event.target.value"
+              ></f7-radio>
+
+            </f7-input>
+          </f7-list-item>
+
+        </f7-list>
+
+
         <f7-block-title>Configurable Robots ({{ xbeeAps.length }}):</f7-block-title>
         <f7-list form>
           <f7-list-item v-for="ap in xbeeAps"
@@ -158,7 +187,7 @@
 
         <f7-block>
           <f7-row tag="p">
-            <f7-button class="col" @click="startSetup" raised fill color="green">Go</f7-button>
+            <f7-button class="col" @click="startSetupBtn" raised fill color="green">Start</f7-button>
             <!-- <f7-button class="col" raised fill>Save (TBD)</f7-button> -->
             <f7-button class="col" raised fill color="orange">Cancel</f7-button>
           </f7-row>
