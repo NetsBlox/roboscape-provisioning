@@ -79,29 +79,13 @@ Vue.component('page-config', {
       console.log('connected to the original accesspoint', this.originalSsid);
     },
 
-    async startSetup() {
-      this.isExecuting = true;
-
-      // make sure the configuration is received and is correct
-      try {
-        this.validateConfig();
-      } catch (e) {
-        alert(e.message);
-        return;
-      }
-      console.log('started configuring robots:');
-      console.log({config: this.config, selectedSsids: this.selectedSsids});
-
-      // TODO lock the configuration (disable changes)
-
-      // save the conf
-      window.localStorage.setItem('ssidConfig', JSON.stringify(this.config));
-
+    async performRobotOwnership() {
       // get the robot ids
       const ids = this.selectedSsids.map(ssid => ssid.replace(XBEE_AP_PREFIX, ''));
       // announce ownership of the robots
       // needs connection to the server (internet)
       this.log(`verifying ownership of ${ids.length} robots..`);
+      this.log(`sending confirmations to ${SERVER_ADDRESS}`);
       try {
         await this.ownRobots(ids);
       } catch (e) {
@@ -109,6 +93,9 @@ Vue.component('page-config', {
         throw e;
       }
 
+    },
+
+    async configureRobots() {
       // connect to each AP and submit the form
       this.log('configuring', this.selectedSsids.length, 'robot(s)');
       for (let ssid of this.selectedSsids) {
