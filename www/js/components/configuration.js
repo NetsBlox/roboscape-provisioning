@@ -137,12 +137,14 @@ Vue.component('page-config', {
       window.localStorage.setItem('ssidConfig', JSON.stringify(this.config));
 
       if (this.verifyOwnership === 'true') {
-        let dialogMsg = 'Make sure the server is reachable before proceeding (most likely means make sure that your phone has internet access)';
-        app.$f7.dialog.confirm(dialogMsg, async () => await this.performRobotOwnership());
+        let dialogMsg = 'Make sure the server is reachable for verifying your ownership before proceeding (most likely it means that your phone has internet access)';
+        confirm(dialogMsg);
+        await this.performRobotOwnership();
       }
 
       let dialogMsg = 'Make sure mobile data is off before proceeding';
-      app.$f7.dialog.confirm(dialogMsg, async () => await this.configureRobots());
+      confirm(dialogMsg);
+      await this.configureRobots();
 
       this.log('finished setup');
       this.isExecuting = false;
