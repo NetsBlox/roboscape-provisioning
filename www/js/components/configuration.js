@@ -47,6 +47,9 @@ Vue.component('page-config', {
       if (missingEncryption()) {
         throw new Error('missing encryption protocol');
       }
+      if (this.selectedSsids.length === 0) {
+        throw new Error('no robot selected');
+      }
     },
 
     log() {
