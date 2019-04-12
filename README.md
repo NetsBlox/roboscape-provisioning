@@ -41,6 +41,7 @@ Get roboscape on [Google Play](https://play.google.com/store/apps/details?id=edu
 - [x] validate wifi config before submitting (maybe confirm with user?)
 - [ ] Internet or server connectivity check
 - [x] test again after mixin refactoring
+- [ ] initial load screen
 
 ## Firmware TODO
 - [x] physical button (5sec hold) to enter configuration mode
