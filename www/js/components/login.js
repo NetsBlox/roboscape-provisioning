@@ -44,12 +44,17 @@ Vue.component('page-login', {
         }, {
           timeout: 1000, // the server should respond within 2 second
         });
-        SERVER_ADDRESS = newServer;
+        this.sharedState.serverAddress = newServer;
+
+        // the server address for the authenticator is not updated through 2way binding
+        this.updateAuthServerAddr();
+
         window.localStorage.setItem('serverAddress', newServer);
         this.$f7.dialog.close();
-        this.$f7.dialog.alert(`changed the target server to ${SERVER_ADDRESS}`);
+        this.$f7.dialog.alert(`changed the target server to ${this.sharedState.serverAddress}`);
         // TODO handle the authentication status change
       } catch (e) {
+        console.error(e);
         this.$f7.dialog.close();
         this.$f7.dialog.alert('failed to set the server: address unreachable.');
       }

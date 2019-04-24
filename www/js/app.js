@@ -4,9 +4,6 @@ const XBEE_IP = '192.168.1.10';
 const XBEE_ENDPOINT = 'http://' + XBEE_IP;
 const XBEE_AP_PREFIX = 'xbee-';
 
-let SERVER_ADDRESS = window.localStorage.getItem('serverAddress') || 'https://dev.netsblox.org';
-
-
 // Init F7 Vue Plugin
 Framework7.use(Framework7Vue);
 

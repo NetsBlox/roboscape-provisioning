@@ -1,6 +1,7 @@
 // waits for a sync fn
 const sharedStore = {
   state: {
+    serverAddress: window.localStorage.getItem('serverAddress') || 'https://dev.netsblox.org',
     profile: null,
     originalAp: '',
     curSSID: '',

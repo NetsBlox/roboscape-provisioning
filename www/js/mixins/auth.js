@@ -1,15 +1,21 @@
 'use strict';
 
 const authMixin = {
-  data: () => {
-    return {
-      authenticator: new AuthHandler(SERVER_ADDRESS),
-      sharedState: sharedStore.state,
-    };
+  data: { // share between instances
+    authenticator: null,
+    sharedState: sharedStore.state,
+  },
 
+  created() {
+    this.authenticator = new AuthHandler(this.sharedState.serverAddress);
   },
 
   methods: {
+    // updates the server address for the authenticator
+    updateAuthServerAddr() {
+      this.authenticator.serverUrl = this.sharedState.serverAddress;
+    },
+
     // checks login status and sets the user profile
     async fetchLoginStatus() {
       try {

@@ -6,6 +6,7 @@ const robotMixin = {
     return {
       liveRobots: [],
       ownedRobots: [],
+      sharedState: sharedStore.state,
     };
   },
 
@@ -14,7 +15,7 @@ const robotMixin = {
     async ownRobot(robotId) {
       let res = await axios({
         method: 'POST',
-        url: SERVER_ADDRESS + '/api/roboscape/robots',
+        url: this.sharedState.serverAddress + '/api/roboscape/robots',
         // url: 'http://requestbin.fullcontact.com/1h98xma1',
         data: {
           robotId
@@ -37,7 +38,7 @@ const robotMixin = {
     // checks for live connected robots
     async getMyLiveRobots() {
       const { data } = await axios({
-        url: SERVER_ADDRESS + '/rpc//RoboScape/getRobots?uuid=FAKE_CLIENT_ID&projectId=FAKE_ID',
+        url: this.sharedState.serverAddress + '/rpc//RoboScape/getRobots?uuid=FAKE_CLIENT_ID&projectId=FAKE_ID',
         method: 'post',
         data: {},
         withCredentials: true,
@@ -62,7 +63,7 @@ const robotMixin = {
 
     async getMyRobots() {
       const { data } = await axios({
-        url: SERVER_ADDRESS + '/api/roboscape/robots',
+        url: this.sharedState.serverAddress + '/api/roboscape/robots',
         method: 'get',
         data: {},
         withCredentials: true,

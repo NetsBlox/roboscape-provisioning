@@ -87,11 +87,11 @@ Vue.component('page-config', {
       // announce ownership of the robots
       // needs connection to the server (internet)
       this.log(`verifying ownership of ${ids.length} robots..`);
-      this.log(`sending confirmations to ${SERVER_ADDRESS}`);
+      this.log(`sending confirmations to ${this.sharedState.serverAddress}`);
       try {
         await this.ownRobots(ids);
       } catch (e) {
-        this.log(`connectivity issue with the server: ${SERVER_ADDRESS}`);
+        this.log(`connectivity issue with the server: ${this.sharedState.serverAddress}`);
         throw e;
       }
 
