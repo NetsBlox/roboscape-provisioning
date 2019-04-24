@@ -31,5 +31,28 @@ Vue.component('page-login', {
         app.dialog.close(); // gets called before alert dialog..
       }
     },
+
+    async promptServerChange() {
+      let newServer = prompt('What is the server address you want to connect to?');
+      if (!newServer) return; // cancel
+      this.$f7.dialog.preloader('checking the server..');
+      try {
+        await axios.post(newServer + '/api', {
+          api: false,
+          return_user: false,
+          silent: true,
+        }, {
+          timeout: 1000, // the server should respond within 2 second
+        });
+        SERVER_ADDRESS = newServer;
+        window.localStorage.setItem('serverAddress', newServer);
+        this.$f7.dialog.close();
+        this.$f7.dialog.alert(`changed the target server to ${SERVER_ADDRESS}`);
+        // TODO handle the authentication status change
+      } catch (e) {
+        this.$f7.dialog.close();
+        this.$f7.dialog.alert('failed to set the server: address unreachable.');
+      }
+    },
   },
 });
